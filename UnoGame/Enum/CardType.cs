@@ -1,4 +1,4 @@
-namespace UnoGame;
+namespace UnoGame.Enum;
 
 public enum CardType{
     Zero,
@@ -16,12 +16,4 @@ public enum CardType{
     DrawTwo,
     Wild,
     DrawFour
-}
-
-public enum CardColor{
-    Black,
-    Blue,
-    Red,
-    Yellow,
-    Green
 }

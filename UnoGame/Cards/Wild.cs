@@ -1,4 +1,5 @@
 namespace UnoGame.Cards;
+using UnoGame.Enum;
 
 public class Wild : Card
 {

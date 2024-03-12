@@ -1,4 +1,5 @@
 namespace UnoGame;
+using UnoGame.Enum;
 
 using System.Collections;
 using System.ComponentModel;
@@ -37,11 +38,11 @@ public class Deck : IDeck
             CardDeck.Add(new Wild(i, CardColor.Black, CardType.Wild));
         }
 
-        foreach(CardColor color in Enum.GetValues(typeof(CardColor)))
+        foreach(CardColor color in CardColor.GetValues(typeof(CardColor)))
         {
             if (color != CardColor.Black)
             {
-                foreach(CardType type in Enum.GetValues(typeof(CardType)))
+                foreach(CardType type in CardType.GetValues(typeof(CardType)))
                 {
                     switch(type)
                     {

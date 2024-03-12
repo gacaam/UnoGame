@@ -1,4 +1,5 @@
 namespace UnoGame;
+using UnoGame.Enum;
 public interface ICard
 {
     public int ID {get;}

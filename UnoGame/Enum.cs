@@ -1,7 +1,7 @@
 namespace UnoGame;
 
 public enum CardType{
-    Zero = 0,
+    Zero,
     One,
     Two,
     Three,
@@ -11,11 +11,11 @@ public enum CardType{
     Seven,
     Eight,
     Nine,
-    Skip = 0,
-    Reverse = 0,
-    DrawTwo = 0,
-    Wild = 0,
-    DrawFour = 0
+    Skip,
+    Reverse,
+    DrawTwo,
+    Wild,
+    DrawFour
 }
 
 public enum CardColor{

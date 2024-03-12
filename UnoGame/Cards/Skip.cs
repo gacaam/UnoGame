@@ -2,10 +2,9 @@ namespace UnoGame.Cards;
 
 public class Skip : Card
 {
-    public Skip(int id, string name, CardColor color, CardType type) : base(id, name, color, type)
+    public Skip(int id, CardColor color, CardType type) : base(id, color, type)
     {
         ID = id;
-        name = Name;
         color = Color;
         type = Type;
     }

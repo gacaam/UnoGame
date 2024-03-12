@@ -2,10 +2,9 @@ namespace UnoGame.Cards;
 
 public class WildDrawFour : Card
 {
-    public WildDrawFour(int id, string name, CardColor color, CardType type) : base(id, name, color, type)
+    public WildDrawFour(int id, CardColor color, CardType type) : base(id, color, type)
     {
         ID = id;
-        name = Name;
         color = Color;
         type = Type;
     }

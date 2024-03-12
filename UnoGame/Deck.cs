@@ -14,7 +14,7 @@ public class Deck : IDeck
 {
     public int ID {get;}
     public string Name {get;}
-    public Queue<Card> CardDeck {get; set;}
+    public List<Card> CardDeck {get; set;}
     public Deck(int id, string name)
     {
         ID = id;
@@ -29,32 +29,67 @@ public class Deck : IDeck
     //     return new Card();
     // }c
     public void CreateDeck()
-    {
+    {                           
+        // Add four draw 4  & wild cards
+        for(int i=0; i<4; i++)
+        {
+            CardDeck.Add(new WildDrawFour(i, CardColor.Black, CardType.DrawTwo));
+            CardDeck.Add(new Wild(i, CardColor.Black, CardType.Wild));
+        }
+
         foreach(CardColor color in Enum.GetValues(typeof(CardColor)))
         {
-            // Add normal cards
-            foreach(CardType type in Enum.GetValues(typeof(CardType)))
+            if (color != CardColor.Black)
             {
-                switch(type)
+                foreach(CardType type in Enum.GetValues(typeof(CardType)))
                 {
-                    case CardType.Zero:
-                    case CardType.One:
-                    case CardType.Two:
-                    case CardType.Three:
-                    case CardType.Four:
-                    case CardType.Five:
-                    case CardType.Six:
-                    case CardType.Seven:
-                    case CardType.Eight:
-                    case CardType.Nine:
-                        for(int i=0; i<2; i++)
-                        {
-                            CardDeck.Enqueue
-                            (
-                                new Normal()
-                            );
-                        }
-                        break;
+                    switch(type)
+                    {
+                        // Add one 0 card in each color
+                        case CardType.Zero:
+                            CardDeck.Add(new Normal(0, color, type));
+                            break;
+
+                        // Add two 1-9 cards in each color 
+                        case CardType.One:
+                        case CardType.Two:
+                        case CardType.Three:
+                        case CardType.Four:
+                        case CardType.Five:
+                        case CardType.Six:
+                        case CardType.Seven:
+                        case CardType.Eight:
+                        case CardType.Nine:
+                            for(int i=0; i<2; i++)
+                            {
+                                CardDeck.Add(new Normal(i, color, type));
+                            }
+                            break;
+
+                        // Add two skip cards in each color
+                        case CardType.Skip:
+                            for(int i=0; i<2; i++)
+                            {
+                                CardDeck.Add(new Skip(i, color, type));
+                            }
+                            break;
+
+                        // Add two reverse cards in each color
+                        case CardType.Reverse:
+                            for(int i=0; i<2; i++)
+                            {
+                                CardDeck.Add(new Reverse(i, color, type));
+                            }
+                            break;
+
+                        // Add two draw 2 cards in each color
+                        case CardType.DrawTwo:
+                            for(int i=0; i<2; i++)
+                            {
+                                CardDeck.Add(new DrawTwo(i, color, type));
+                            }
+                            break;
+                    }
                 }
             }
         }

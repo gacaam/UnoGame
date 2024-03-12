@@ -13,15 +13,15 @@ public interface IDeck
 public class Deck : IDeck
 {
     public int ID {get;}
-    public List<Card> Cards {get; set;} = [];
+    public Stack<Card> Cards {get; set;} = [];
 
     // constructors
-    public Deck(int id, List<Card> cards)
+    public Deck(int id, Stack<Card> cards)
     {
         ID = id;
         Cards = cards;
     }
-    public Deck(List<Card> cards)
+    public Deck(Stack<Card> cards)
     {
         Cards = cards;
     }
@@ -47,8 +47,8 @@ public class Deck : IDeck
         // Add four draw 4 & wild cards
         for(int i=0; i<4; i++)
         {
-            Cards.Add(new WildDrawFour(i, CardColor.Black, CardType.DrawTwo));
-            Cards.Add(new Wild(i, CardColor.Black, CardType.Wild));
+            Cards.Push(new WildDrawFour(i, CardColor.Black, CardType.DrawTwo));
+            Cards.Push(new Wild(i, CardColor.Black, CardType.Wild));
         }
 
         foreach(CardColor color in CardColor.GetValues(typeof(CardColor)))
@@ -61,7 +61,7 @@ public class Deck : IDeck
                     {
                         // Add one 0 card in each color
                         case CardType.Zero:
-                            Cards.Add(new Normal(0, color, type));
+                            Cards.Push(new Normal(0, color, type));
                             break;
 
                         // Add two 1-9 cards in each color 
@@ -76,7 +76,7 @@ public class Deck : IDeck
                         case CardType.Nine:
                             for(int i=0; i<2; i++)
                             {
-                                Cards.Add(new Normal(i, color, type));
+                                Cards.Push(new Normal(i, color, type));
                             }
                             break;
 
@@ -84,7 +84,7 @@ public class Deck : IDeck
                         case CardType.Skip:
                             for(int i=0; i<2; i++)
                             {
-                                Cards.Add(new Skip(i, color, type));
+                                Cards.Push(new Skip(i, color, type));
                             }
                             break;
 
@@ -92,7 +92,7 @@ public class Deck : IDeck
                         case CardType.Reverse:
                             for(int i=0; i<2; i++)
                             {
-                                Cards.Add(new Reverse(i, color, type));
+                                Cards.Push(new Reverse(i, color, type));
                             }
                             break;
 
@@ -100,7 +100,7 @@ public class Deck : IDeck
                         case CardType.DrawTwo:
                             for(int i=0; i<2; i++)
                             {
-                                Cards.Add(new DrawTwo(i, color, type));
+                                Cards.Push(new DrawTwo(i, color, type));
                             }
                             break;
                     }

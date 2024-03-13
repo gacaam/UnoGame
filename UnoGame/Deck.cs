@@ -1,15 +1,12 @@
 namespace UnoGame;
 using UnoGame.Enum;
+using UnoGame.Interface;
 
 using System.Collections;
 using System.ComponentModel;
 using UnoGame.Cards;
+using System.Security.Cryptography.X509Certificates;
 
-public interface IDeck
-{
-    public int ID {get;}
-    
-}
 public class Deck : IDeck
 {
     public int ID {get;}
@@ -34,10 +31,22 @@ public class Deck : IDeck
     public Deck()
     {
     }
-    public bool ShuffleDeck()
-    
-    {
-        return true;
+    public Stack<ICard> ShuffleDeck(Stack<ICard> cards)
+    {   
+        List<ICard> cardList = cards.ToList();
+        Stack<ICard> shuffledCards = [];
+        int count = cardList.Count;
+        Random r = new Random();
+
+        while(count>1)
+        {
+            int i = r.Next(count--);
+            var temp = cardList[i];
+            cardList[i] = cardList[count];
+            cardList[count] = temp;
+            shuffledCards.Push(cardList[count]);
+        }
+        return shuffledCards;
     }
     // public ICard Draw(){
     //     return new Card();

@@ -1,11 +1,7 @@
 namespace UnoGame;
 using UnoGame.Enum;
-public interface ICard
-{
-    public int ID {get;}
-    public CardType Type{get;}
-    public CardColor Color{get;}
-}
+using UnoGame.Interface;
+
 public abstract class Card : ICard
 {
     public Card(int id, CardColor color, CardType type)

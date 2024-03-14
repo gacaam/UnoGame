@@ -8,11 +8,40 @@ public class GameController
     public event Action<IPlayer> OnTurnChange; 
     public event Action<IPlayer> CallUNO;
     public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;}
-    public Deck CardDeck {get; private set;}
+    public Deck CardDeck {get; private set;} = new();
+    public Stack<ICard> DiscardPile {get; private set;} = new();
     public ICard CurrentRevealedCard {get; private set;}
     public GameRotation Rotation {get; private set;}
     public IPlayer[] WinnerOrder {get; private set;}
     public IPlayer currentPlayer{get; private set;}
+    public GameController(int numOfPlayers)
+    {
+        // Shuffle Deck
+        var ShuffledDeck = CardDeck.ShuffleDeck();
+
+        // Add players & deal players' cards
+        for(int i=0; i<numOfPlayers; i++)
+        {
+            Console.WriteLine($"Enter player {i}'s name:");
+            string playerName = Console.ReadLine();
+            Player newPlayer = new(playerName, i);
+            
+            InsertPlayer(newPlayer);
+            SetPlayerHand(newPlayer);
+        }
+
+        // Initial discard card
+        var firstCard = DrawCard();
+
+        while(firstCard.Color == CardColor.Black)
+        {
+            CardDeck.Cards.Push(firstCard);
+            CardDeck.ShuffleDeck();
+            firstCard = DrawCard();
+        }
+        DiscardPile.Push(firstCard);
+
+    }
     public bool InsertPlayer(IPlayer player){
         PlayersHand.Add(player, new List<ICard>());
         return true;
@@ -33,6 +62,7 @@ public class GameController
     }
 
     public bool PlayerPlayCard(IPlayer player, ICard card){
+        Console.WriteLine($"{player.Name}: {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
         return true;
     }
 
@@ -62,4 +92,6 @@ public class GameController
 
         return true;
     }
+
+
 }

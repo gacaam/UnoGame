@@ -9,7 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 
 public class Deck 
 {
-    public Stack<Card> Cards {get; set;} = [];
+    public Stack<ICard> Cards {get; set;} = [];
 
     // constructor
     public Deck()
@@ -84,9 +84,9 @@ public class Deck
         Cards = cards;
     }
 
-    public Stack<ICard> ShuffleDeck(Stack<ICard> cards)
+    public Stack<ICard> ShuffleDeck()
     {   
-        List<ICard> cardList = cards.ToList();
+        List<ICard> cardList = Cards.ToList();
         Stack<ICard> shuffledCards = [];
         int count = cardList.Count;
         Random r = new Random();

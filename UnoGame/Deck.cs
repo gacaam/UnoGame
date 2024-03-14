@@ -79,7 +79,7 @@ public class Deck
         }
     }
 
-    public Deck(Stack<Card> cards)
+    public Deck(Stack<ICard> cards)
     {
         Cards = cards;
     }

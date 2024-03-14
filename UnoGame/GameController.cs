@@ -24,6 +24,9 @@ public class GameController
         {
             Console.WriteLine($"Enter player {i}'s name:");
             string playerName = Console.ReadLine();
+
+            // Set default name if null input
+            playerName ??= $"Player{i}";
             Player newPlayer = new(playerName, i);
             
             InsertPlayer(newPlayer);
@@ -33,6 +36,7 @@ public class GameController
         // Initial discard card
         var firstCard = DrawCard();
 
+        // First card cannot be a wild card
         while(firstCard.Color == CardColor.Black)
         {
             CardDeck.Cards.Push(firstCard);
@@ -40,6 +44,8 @@ public class GameController
             firstCard = DrawCard();
         }
         DiscardPile.Push(firstCard);
+
+        // Game Play
 
     }
     public bool InsertPlayer(IPlayer player){
@@ -66,10 +72,20 @@ public class GameController
         return true;
     }
 
+    public void AddTwoPenalty(IPlayer player){
+
+    }
     public bool PlayerCallUNO(IPlayer player){
         // event CallUNO
-        Console.WriteLine();
-        return true;
+        Console.WriteLine($"{player.Name}: UNO!");
+        if(PlayersHand[currentPlayer].Count == 1)
+        {   
+            Console.WriteLine("Successful UNO challenge >:)");
+            return true;
+        }
+        Console.WriteLine($"Oops! False challenge... {player.Name} still has more than 1 card.");
+        return false;
+        
     }
 
     public bool ChangeRotation(){

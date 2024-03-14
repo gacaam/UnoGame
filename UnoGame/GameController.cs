@@ -54,6 +54,7 @@ public class GameController
 
         // Game Play
         //TODO implement game play
+        
     }
     public bool InsertPlayer(IPlayer player){
         PlayersHand.Add(player, new List<ICard>());
@@ -71,18 +72,12 @@ public class GameController
         return PlayersHand[player];
     }
 
-    public bool possibleColor(ICard card){
-        return(card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black);
+    public bool PossibleCard(ICard card){
+        return(card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard.Type);
     }
-
-    public bool possibleValue(ICard card){
-        return(card.Type == CurrentRevealedCard.Type);
-    }
-
-    public IEnumerable<ICard> GetPossibleCard(IPlayer player){ //TODO: GetPossibleCard
-        List<ICard> possibleCards = new List<ICard>(PlayersHand[player].FindAll(possibleColor));
-        possibleCards.AddRange(PlayersHand[player].FindAll(possibleValue));
-        return new List<ICard>();
+    public IEnumerable<ICard> GetPossibleCards(IPlayer player){ 
+        List<ICard> possibleCards = new List<ICard>(PlayersHand[player].FindAll(PossibleCard));
+        return possibleCards;
     }
 
     public IEnumerable<Player> GetWinnerOrder(){ //TODO: GetWinnerOrder

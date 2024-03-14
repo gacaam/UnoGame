@@ -12,9 +12,10 @@ public class WildDrawFour : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
+        Console.WriteLine("Choose a color: ");
         for(int i=0; i<4; i++)
         {
-            gameController.DrawCard();
+            gameController.PlayerDrawCard(gameController.NextPlayer);
         }
         return CardType.DrawFour;
     }

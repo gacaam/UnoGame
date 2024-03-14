@@ -12,7 +12,7 @@ public class GameController
     public Deck CardDeck {get; private set;} = new();
     public Stack<ICard> DiscardPile {get; private set;} = new();
     public ICard CurrentRevealedCard {get; private set;}
-    public GameRotation Rotation {get; private set;}
+    public GameRotation Rotation {get; private set;} = GameRotation.Clockwise;
     public IPlayer[] WinnerOrder {get; private set;}
     public IPlayer CurrentPlayer{get; private set;}
     public IPlayer NextPlayer{get; private set;}
@@ -61,13 +61,7 @@ public class GameController
         List<IPlayer> playersList = PlayersHand.Keys.ToList();
         while(true)
         {
-            foreach(Player player in PlayersHand.Keys)
-            {
-                CurrentPlayer = player;
-                if(PlayersHand[player].Count == 0){
-                    break;
-                }
-            }
+            PlayerTurn(playersList);
         }
 
     }
@@ -88,11 +82,10 @@ public class GameController
     }
 
     public bool PossibleCard(ICard card){
-        return(card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard.Type);
+        return(card.Color == CurrentRevealedCard.Color || card.Type == CurrentRevealedCard.Type);
     }
-    public IEnumerable<ICard> GetPossibleCards(IPlayer player){ 
-        List<ICard> possibleCards = [];
-        possibleCards = PlayersHand[player].FindAll(PossibleCard);
+    public List<ICard> GetPossibleCards(IPlayer player){ 
+        List<ICard> possibleCards = PlayersHand[player].FindAll(PossibleCard);
         return possibleCards;
     }
 
@@ -100,11 +93,11 @@ public class GameController
         return [];
     }
 
-    public bool PlayerPlayCard(IPlayer player, ICard card){ 
-        DiscardPile.Push(card);
-        CurrentRevealedCard = card;
-        var type =  card.ExecuteCardEffect(this);
-        Console.WriteLine($"{player.Name}: {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+    public bool PlayerPlayCard(IPlayer player, ICard cardChosen){ 
+        DiscardPile.Push(cardChosen);
+        CurrentRevealedCard = cardChosen;
+        var type =  cardChosen.ExecuteCardEffect(this);
+        Console.WriteLine($"{player.Name}: {Enum.GetName(typeof(CardType), cardChosen.Type)}{Enum.GetName(typeof(CardColor), cardChosen.Color)}");
         return true;
     }
 
@@ -129,14 +122,43 @@ public class GameController
     }
 
     public bool ChangeRotation(){
-        //TODO: Change Rotation
+        if(Rotation == GameRotation.Clockwise){
+            Rotation = GameRotation.CounterClockwise;
+        }else{
+            Rotation = GameRotation.Clockwise;
+        }
         return true;
     }
 
     public void PlayerTurn(List<IPlayer> players){
+        Console.Clear();
         CurrentPlayer = players[CurrentPlayerIndex];
         NextPlayer = players[NextPlayerIndex];
-        
+        List<ICard> possibleCards = GetPossibleCards(CurrentPlayer);
+        List<ICard> otherCards = PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
+
+        Console.WriteLine($"Last Card:\t{CurrentRevealedCard}\n");
+        Console.WriteLine($"{CurrentPlayer.Name}'s turn\n");
+        Console.WriteLine("(Available cards)");
+        for(int i = 0; i < possibleCards.Count; i++){
+            var card = possibleCards[i];
+            Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+        }
+        Console.WriteLine("(Other cards in hand)");
+        for(int i = 0; i < otherCards.Count; i++){
+            var card = otherCards[i];
+            Console.WriteLine($"\t{i+possibleCards.Count+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+        }
+        Console.WriteLine("\nChoose a card by index: ");
+
+        var input = Console.ReadLine();
+        int indexVal;
+        while(!int.TryParse(input, out indexVal) || indexVal > (possibleCards.Count-1)){
+            Console.WriteLine("Try again... Choose only available cards by index (ex: 1)");
+            input = Console.ReadLine();
+        }
+        PlayerPlayCard(CurrentPlayer, possibleCards[indexVal]);
+        NextTurn();
     }
     public void NextTurn()
     {
@@ -149,7 +171,7 @@ public class GameController
         }
     }
 
-    public ICard PlayerDrawCard(Player player){
+    public ICard PlayerDrawCard(IPlayer player){
         var drawnCard = CardDeck.Draw();
         PlayersHand[player].Add(drawnCard);
         return drawnCard;

@@ -14,7 +14,7 @@ public class DrawTwo : Card
     {
         for(int i=0; i<2; i++)
         {
-            gameController.DrawCard();
+            gameController.PlayerDrawCard(gameController.NextPlayer);
         }
         return CardType.DrawFour;
     }

@@ -22,7 +22,21 @@ public class WildDrawFour : Card
 
         if(Enum.Parse(typeof(CardColor), inputColor).Equals("Red"))
         {
-            
+            this.Color = CardColor.Red;
+        }
+        
+        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Yellow"))
+        {
+            this.Color = CardColor.Yellow;
+        }
+
+        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Green"))
+        {
+            this.Color = CardColor.Green;
+        }
+        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Blue"))
+        {
+            this.Color = CardColor.Blue;
         }
 
         for(int i=0; i<4; i++)

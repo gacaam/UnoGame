@@ -4,6 +4,6 @@ class Program
 {
     static void Main()
     {
-        // GameController gameControl = new(arg);
+        GameController gameControl = new();
     }
 }

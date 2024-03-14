@@ -32,8 +32,9 @@ public class GameController
         }
         for(int i=0; i<numOfPlayers; i++)
         {
-            Console.WriteLine($"Enter player {i}'s name:");
-            string playerName = Console.ReadLine();
+            Console.WriteLine($"\nEnter player {i+1}'s name:");
+            string playerName;
+            playerName = Console.ReadLine();
 
             // Set default name if null input
             playerName ??= $"Player{i}";
@@ -67,10 +68,9 @@ public class GameController
             }
             NextTurn();
         }
-
     }
     public bool InsertPlayer(IPlayer player){
-        PlayersHand.Add(player, []);
+        PlayersHand.Add(player, new List<ICard>());
         return true;
     }
     public bool SetPlayerHand(IPlayer player){
@@ -80,7 +80,6 @@ public class GameController
         }
         return true;
     }
-
     public IEnumerable<ICard> GetPlayerHand(IPlayer player){
         return PlayersHand[player];
     }
@@ -122,7 +121,6 @@ public class GameController
         }
         Console.WriteLine($"Oops! False challenge... {player.Name} still has more than 1 card.");
         return false;
-        
     }
 
     public bool ChangeRotation(){
@@ -192,7 +190,6 @@ public class GameController
             NextPlayerIndex = (CurrentPlayerIndex + PlayersHand.Count - 1) % PlayersHand.Count;
         }
     }
-
     public ICard PlayerDrawCard(IPlayer player){
         var drawnCard = CardDeck.Draw();
         PlayersHand[player].Add(drawnCard);

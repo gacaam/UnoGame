@@ -1,5 +1,6 @@
 namespace UnoGame.Cards;
 using UnoGame.Enums;
+using UnoGame.Interface;
 
 public class WildDrawFour : Card
 {
@@ -11,8 +12,11 @@ public class WildDrawFour : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        
-        return base.ExecuteCardEffect(gameController);
+        for(int i=0; i<4; i++)
+        {
+            gameController.DrawCard();
+        }
+        return CardType.DrawFour;
     }
 
 }

@@ -1,5 +1,6 @@
 namespace UnoGame.Cards;
 using UnoGame.Enums;
+using UnoGame.Interface;
 
 public class Skip : Card
 {
@@ -11,7 +12,8 @@ public class Skip : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        return base.ExecuteCardEffect(gameController);
+        gameController.SkipTurn();
+        return CardType.Skip;
     }
 
 }

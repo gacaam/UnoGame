@@ -1,5 +1,6 @@
 namespace UnoGame.Cards;
 using UnoGame.Enums;
+using UnoGame.Interface;
 
 public class Reverse : Card
 {
@@ -11,7 +12,8 @@ public class Reverse : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        return base.ExecuteCardEffect(gameController);
+        gameController.ChangeRotation();
+        return CardType.Reverse;
     }
 
 }

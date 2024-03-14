@@ -12,6 +12,7 @@ public class GameController
     public ICard CurrentRevealedCard {get; private set;}
     public GameRotation Rotation {get; private set;}
     public IPlayer[] WinnerOrder {get; private set;}
+    public IPlayer currentPlayer{get; private set;}
     public bool InsertPlayer(IPlayer player){
         PlayersHand.Add(player, new List<ICard>());
         return true;
@@ -41,10 +42,15 @@ public class GameController
         return true;
     }
 
-    public ICard DrawCard(IPlayer player){
+    public bool ChangeRotation(){
+
+        return true;
+    }
+
+    public ICard DrawCard(){
         var drawnCard = CardDeck.Draw();
-        PlayersHand[player].Add(drawnCard);
-        Console.WriteLine($"{player.Name} draws a {Enum.GetName(typeof(CardType), drawnCard.Type)}{Enum.GetName(typeof(CardColor), drawnCard.Color)} card");
+        PlayersHand[currentPlayer].Add(drawnCard);
+        Console.WriteLine($"{currentPlayer.Name} draws a {Enum.GetName(typeof(CardType), drawnCard.Type)}{Enum.GetName(typeof(CardColor), drawnCard.Color)} card");
         return drawnCard;
     }
 

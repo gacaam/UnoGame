@@ -1,5 +1,6 @@
 namespace UnoGame.Cards;
 using UnoGame.Enums;
+using UnoGame.Interface;
 
 public class Normal : Card
 {
@@ -11,7 +12,8 @@ public class Normal : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        return base.ExecuteCardEffect(gameController);
+
+        return CardType.Zero;
     }
 
 }

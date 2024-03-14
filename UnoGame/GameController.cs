@@ -72,9 +72,12 @@ public class GameController
         return true;
     }
 
-    public void AddTwoPenalty(IPlayer player){
-
+    public void AddTwoPenalty(){
+        Console.WriteLine($"{currentPlayer.Name} draws 2 card.");
+        DrawCard();
+        DrawCard();
     }
+    
     public bool PlayerCallUNO(IPlayer player){
         // event CallUNO
         Console.WriteLine($"{player.Name}: UNO!");
@@ -96,7 +99,6 @@ public class GameController
     public ICard DrawCard(){
         var drawnCard = CardDeck.Draw();
         PlayersHand[currentPlayer].Add(drawnCard);
-        Console.WriteLine($"{currentPlayer.Name} draws a {Enum.GetName(typeof(CardType), drawnCard.Type)}{Enum.GetName(typeof(CardColor), drawnCard.Color)} card");
         return drawnCard;
     }
 

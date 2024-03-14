@@ -97,7 +97,7 @@ public class GameController
         DiscardPile.Push(cardChosen);
         CurrentRevealedCard = cardChosen;
         var type =  cardChosen.ExecuteCardEffect(this);
-        Console.WriteLine($"{player.Name}: {Enum.GetName(typeof(CardType), cardChosen.Type)}{Enum.GetName(typeof(CardColor), cardChosen.Color)}");
+        Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), cardChosen.Type)}{Enum.GetName(typeof(CardColor), cardChosen.Color)}");
         return true;
     }
 
@@ -139,25 +139,46 @@ public class GameController
 
         Console.WriteLine($"Last Card:\t{CurrentRevealedCard}\n");
         Console.WriteLine($"{CurrentPlayer.Name}'s turn\n");
-        Console.WriteLine("(Available cards)");
-        for(int i = 0; i < possibleCards.Count; i++){
-            var card = possibleCards[i];
-            Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
-        }
-        Console.WriteLine("(Other cards in hand)");
-        for(int i = 0; i < otherCards.Count; i++){
-            var card = otherCards[i];
-            Console.WriteLine($"\t{i+possibleCards.Count+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
-        }
-        Console.WriteLine("\nChoose a card by index: ");
 
-        var input = Console.ReadLine();
-        int indexVal;
-        while(!int.TryParse(input, out indexVal) || indexVal > (possibleCards.Count-1)){
-            Console.WriteLine("Try again... Choose only available cards by index (ex: 1)");
-            input = Console.ReadLine();
+        if(possibleCards.Count>0)
+        {
+            Console.WriteLine("(Available cards)");
+            for(int i = 0; i < possibleCards.Count; i++){
+                var card = possibleCards[i];
+                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+            }
+            Console.WriteLine("(Other cards in hand)");
+            for(int i = 0; i < otherCards.Count; i++){
+                var card = otherCards[i];
+                Console.WriteLine($"\t{i+possibleCards.Count+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+            }
+            Console.WriteLine("\nChoose a card by index: ");
+
+            var input = Console.ReadLine();
+            int indexVal;
+            while(!int.TryParse(input, out indexVal) || indexVal > (possibleCards.Count-1)){
+                Console.WriteLine("Try again... Choose only available cards by index (ex: 1)");
+                input = Console.ReadLine();
+            }
+            PlayerPlayCard(CurrentPlayer, possibleCards[indexVal]);
+
+        }else{
+            Console.WriteLine("(No available cards to play)");
+            Console.WriteLine("(Cards in hand)");
+            for(int i = 0; i < otherCards.Count; i++){
+                var card = otherCards[i];
+                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+            }
+        Console.WriteLine("");
+        var newCard = PlayerDrawCard(CurrentPlayer);
+        Console.WriteLine($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)}{Enum.GetName(typeof(CardColor), newCard.Color)}");
+        
+        if(PossibleCard(newCard)){
+            PlayerPlayCard(CurrentPlayer,newCard);
         }
-        PlayerPlayCard(CurrentPlayer, possibleCards[indexVal]);
+        
+        }
+
         NextTurn();
     }
     public void NextTurn()
@@ -174,11 +195,7 @@ public class GameController
     public ICard PlayerDrawCard(IPlayer player){
         var drawnCard = CardDeck.Draw();
         PlayersHand[player].Add(drawnCard);
+        Console.WriteLine("Draws a card");
         return drawnCard;
     }
-
-    public IEnumerable<IPlayer> SkipTurn(){ //TODO: SkipTurn
-        return [];
-    }
-
 }

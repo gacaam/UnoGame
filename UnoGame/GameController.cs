@@ -21,7 +21,7 @@ public class GameController
     public GameController()
     {
         // Shuffle Deck
-        var ShuffledDeck = CardDeck.ShuffleDeck();
+        CardDeck.ShuffleDeck();
 
         // Add players & deal players' cards
         Console.WriteLine("Enter number of players (max 4):");
@@ -50,16 +50,21 @@ public class GameController
         // First card cannot be a wild card
         while(firstCard.Color == CardColor.Black)
         {
+            Console.WriteLine("Oops, wild card. Draw again!");
             CardDeck.Cards.Push(firstCard);
-            CardDeck.ShuffleDeck();
+            CardDeck.Cards = CardDeck.ShuffleDeck();
             firstCard = CardDeck.Draw();
         }
         DiscardPile.Push(firstCard);
+        CurrentRevealedCard = firstCard;
+        Console.WriteLine($"First Card:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
 
         // Game Play
         //TODO implement game play
         CurrentPlayerIndex = 0;
         List<IPlayer> playersList = PlayersHand.Keys.ToList();
+
+        Console.WriteLine("Starting Game!\n");
         while(PlayersHand[CurrentPlayer].Count>0)
         {
             PlayerTurn(playersList);
@@ -97,7 +102,7 @@ public class GameController
         DiscardPile.Push(cardChosen);
         CurrentRevealedCard = cardChosen;
         var type =  cardChosen.ExecuteCardEffect(this);
-        Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), type)}{Enum.GetName(typeof(CardColor), cardChosen.Color)}");
+        Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), type)} {Enum.GetName(typeof(CardColor), cardChosen.Color)}");
         return true;
     }
 
@@ -136,7 +141,7 @@ public class GameController
         List<ICard> possibleCards = GetPossibleCards(CurrentPlayer);
         List<ICard> otherCards = PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
 
-        Console.WriteLine($"Last Card:\t{CurrentRevealedCard}\n");
+        Console.WriteLine($"Last Card Played:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
         Console.WriteLine($"{CurrentPlayer.Name}'s turn\n");
 
         if(possibleCards.Count>0)
@@ -144,12 +149,12 @@ public class GameController
             Console.WriteLine("(Available cards)");
             for(int i = 0; i < possibleCards.Count; i++){
                 var card = possibleCards[i];
-                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
             }
             Console.WriteLine("(Other cards in hand)");
             for(int i = 0; i < otherCards.Count; i++){
                 var card = otherCards[i];
-                Console.WriteLine($"\t{i+possibleCards.Count+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+                Console.WriteLine($"\t{i+possibleCards.Count+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
             }
             Console.WriteLine("\nChoose a card by index: ");
 
@@ -166,11 +171,11 @@ public class GameController
             Console.WriteLine("(Cards in hand)");
             for(int i = 0; i < otherCards.Count; i++){
                 var card = otherCards[i];
-                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
+                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
             }
         Console.WriteLine("");
         var newCard = PlayerDrawCard(CurrentPlayer);
-        Console.WriteLine($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)}{Enum.GetName(typeof(CardColor), newCard.Color)}");
+        Console.WriteLine($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)} {Enum.GetName(typeof(CardColor), newCard.Color)}");
         
         if(PossibleCard(newCard)){
             PlayerPlayCard(CurrentPlayer,newCard);

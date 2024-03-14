@@ -62,6 +62,10 @@ public class GameController
         while(true)
         {
             PlayerTurn(playersList);
+            if(PlayersHand[CurrentPlayer].Count==0){
+                break;
+            }
+            NextTurn();
         }
 
     }
@@ -97,7 +101,7 @@ public class GameController
         DiscardPile.Push(cardChosen);
         CurrentRevealedCard = cardChosen;
         var type =  cardChosen.ExecuteCardEffect(this);
-        Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), cardChosen.Type)}{Enum.GetName(typeof(CardColor), cardChosen.Color)}");
+        Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), type)}{Enum.GetName(typeof(CardColor), cardChosen.Color)}");
         return true;
     }
 
@@ -175,11 +179,8 @@ public class GameController
         
         if(PossibleCard(newCard)){
             PlayerPlayCard(CurrentPlayer,newCard);
+            }
         }
-        
-        }
-
-        NextTurn();
     }
     public void NextTurn()
     {

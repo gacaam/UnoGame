@@ -2,11 +2,12 @@ namespace UnoGame;
 using UnoGame.Interface;
 using UnoGame.Enums;
 using UnoGame.Cards;
+using System.Security.Cryptography.X509Certificates;
 
 public class GameController
 {
-    public event Action<IPlayer> OnTurnChange; 
-    public event Action<IPlayer> CallUNO;
+    public Action<IPlayer> OnTurnChange; 
+    public Action<IPlayer> CallUNO;
     public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;}
     public Deck CardDeck {get; private set;} = new();
     public Stack<ICard> DiscardPile {get; private set;} = new();
@@ -14,12 +15,18 @@ public class GameController
     public GameRotation Rotation {get; private set;}
     public IPlayer[] WinnerOrder {get; private set;}
     public IPlayer currentPlayer{get; private set;}
-    public GameController(int numOfPlayers)
+    public GameController()
     {
         // Shuffle Deck
         var ShuffledDeck = CardDeck.ShuffleDeck();
 
         // Add players & deal players' cards
+        Console.WriteLine("Enter number of players (max 4):");
+        int numOfPlayers;
+        while(!int.TryParse(Console.ReadLine(), out numOfPlayers) || numOfPlayers > 4)
+        {
+            Console.WriteLine("\nInvalid. Enter number of players again (max 4):");
+        }
         for(int i=0; i<numOfPlayers; i++)
         {
             Console.WriteLine($"Enter player {i}'s name:");
@@ -46,7 +53,7 @@ public class GameController
         DiscardPile.Push(firstCard);
 
         // Game Play
-
+        //TODO implement game play
     }
     public bool InsertPlayer(IPlayer player){
         PlayersHand.Add(player, new List<ICard>());
@@ -59,15 +66,30 @@ public class GameController
         }
         return true;
     }
+
     public IEnumerable<ICard> GetPlayerHand(IPlayer player){
         return PlayersHand[player];
     }
 
-    public IEnumerable<Player> GetWinnerOrder(){
+    public bool possibleColor(ICard card){
+        return(card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black);
+    }
+
+    public bool possibleValue(ICard card){
+        return(card.Type == CurrentRevealedCard.Type);
+    }
+
+    public IEnumerable<ICard> GetPossibleCard(IPlayer player){ //TODO: GetPossibleCard
+        List<ICard> possibleCards = new List<ICard>(PlayersHand[player].FindAll(possibleColor));
+        possibleCards.AddRange(PlayersHand[player].FindAll(possibleValue));
+        return new List<ICard>();
+    }
+
+    public IEnumerable<Player> GetWinnerOrder(){ //TODO: GetWinnerOrder
         return new List<Player>();
     }
 
-    public bool PlayerPlayCard(IPlayer player, ICard card){
+    public bool PlayerPlayCard(IPlayer player, ICard card){ //TODO: PlayerPlayCard
         Console.WriteLine($"{player.Name}: {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
         return true;
     }
@@ -77,7 +99,7 @@ public class GameController
         DrawCard();
         DrawCard();
     }
-    
+    //TODO: Action CallUNO
     public bool PlayerCallUNO(IPlayer player){
         // event CallUNO
         Console.WriteLine($"{player.Name}: UNO!");
@@ -92,7 +114,7 @@ public class GameController
     }
 
     public bool ChangeRotation(){
-
+        //TODO: Change Rotation
         return true;
     }
 
@@ -102,14 +124,8 @@ public class GameController
         return drawnCard;
     }
 
-    public IEnumerable<IPlayer> SkipTurn(){
+    public IEnumerable<IPlayer> SkipTurn(){ //TODO: SkipTurn
         return new List<IPlayer>();
     }
-
-    public bool SetDeck(params ICard[] cards){
-
-        return true;
-    }
-
 
 }

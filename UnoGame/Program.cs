@@ -2,8 +2,8 @@
 
 class Program
 {
-    static void Main(int arg)
+    static void Main()
     {
-        GameController gameControl = new(arg);
+        // GameController gameControl = new(arg);
     }
 }

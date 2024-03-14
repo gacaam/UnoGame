@@ -1,5 +1,5 @@
 namespace UnoGame.Interface;
-using UnoGame.Enum;
+using UnoGame.Enums;
 
 public interface ICard
 {

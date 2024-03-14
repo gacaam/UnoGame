@@ -1,5 +1,5 @@
 namespace UnoGame.Cards;
-using UnoGame.Enum;
+using UnoGame.Enums;
 
 public class Reverse : Card
 {

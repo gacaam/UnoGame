@@ -1,5 +1,5 @@
 namespace UnoGame;
-using UnoGame.Enum;
+using UnoGame.Enums;
 using UnoGame.Interface;
 
 public abstract class Card : ICard

@@ -1,4 +1,4 @@
-namespace UnoGame.Enum;
+namespace UnoGame.Enums;
 
 public enum GameRotation
 {

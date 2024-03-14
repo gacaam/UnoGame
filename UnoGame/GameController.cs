@@ -14,7 +14,10 @@ public class GameController
     public ICard CurrentRevealedCard {get; private set;}
     public GameRotation Rotation {get; private set;}
     public IPlayer[] WinnerOrder {get; private set;}
-    public IPlayer currentPlayer{get; private set;}
+    public IPlayer CurrentPlayer{get; private set;}
+    public IPlayer NextPlayer{get; private set;}
+    public int CurrentPlayerIndex {get; private set;}
+    public int NextPlayerIndex {get; private set;}
     public GameController()
     {
         // Shuffle Deck
@@ -41,23 +44,35 @@ public class GameController
         }
 
         // Initial discard card
-        var firstCard = DrawCard();
+        var firstCard = CardDeck.Draw();
 
         // First card cannot be a wild card
         while(firstCard.Color == CardColor.Black)
         {
             CardDeck.Cards.Push(firstCard);
             CardDeck.ShuffleDeck();
-            firstCard = DrawCard();
+            firstCard = CardDeck.Draw();
         }
         DiscardPile.Push(firstCard);
 
         // Game Play
         //TODO implement game play
-        
+        CurrentPlayerIndex = 0;
+        List<IPlayer> playersList = PlayersHand.Keys.ToList();
+        while(true)
+        {
+            foreach(Player player in PlayersHand.Keys)
+            {
+                CurrentPlayer = player;
+                if(PlayersHand[player].Count == 0){
+                    break;
+                }
+            }
+        }
+
     }
     public bool InsertPlayer(IPlayer player){
-        PlayersHand.Add(player, new List<ICard>());
+        PlayersHand.Add(player, []);
         return true;
     }
     public bool SetPlayerHand(IPlayer player){
@@ -76,29 +91,34 @@ public class GameController
         return(card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard.Type);
     }
     public IEnumerable<ICard> GetPossibleCards(IPlayer player){ 
-        List<ICard> possibleCards = new List<ICard>(PlayersHand[player].FindAll(PossibleCard));
+        List<ICard> possibleCards = [];
+        possibleCards = PlayersHand[player].FindAll(PossibleCard);
         return possibleCards;
     }
 
     public IEnumerable<Player> GetWinnerOrder(){ //TODO: GetWinnerOrder
-        return new List<Player>();
+        return [];
     }
 
-    public bool PlayerPlayCard(IPlayer player, ICard card){ //TODO: PlayerPlayCard
+    public bool PlayerPlayCard(IPlayer player, ICard card){ 
+        DiscardPile.Push(card);
+        CurrentRevealedCard = card;
+        var type =  card.ExecuteCardEffect(this);
         Console.WriteLine($"{player.Name}: {Enum.GetName(typeof(CardType), card.Type)}{Enum.GetName(typeof(CardColor), card.Color)}");
         return true;
     }
 
-    public void AddTwoPenalty(){
-        Console.WriteLine($"{currentPlayer.Name} draws 2 card.");
-        DrawCard();
-        DrawCard();
-    }
+    // public void AddTwoPenalty(){
+    //     Console.WriteLine($"{currentPlayer.Name} draws 2 card.");
+    //     DrawCard();
+    //     DrawCard();
+    // }
+
     //TODO: Action CallUNO
     public bool PlayerCallUNO(IPlayer player){
         // event CallUNO
         Console.WriteLine($"{player.Name}: UNO!");
-        if(PlayersHand[currentPlayer].Count == 1)
+        if(PlayersHand[CurrentPlayer].Count == 1)
         {   
             Console.WriteLine("Successful UNO challenge >:)");
             return true;
@@ -113,14 +133,30 @@ public class GameController
         return true;
     }
 
-    public ICard DrawCard(){
+    public void PlayerTurn(List<IPlayer> players){
+        CurrentPlayer = players[CurrentPlayerIndex];
+        NextPlayer = players[NextPlayerIndex];
+        
+    }
+    public void NextTurn()
+    {
+        if(Rotation == GameRotation.Clockwise){
+            CurrentPlayerIndex = (CurrentPlayerIndex + 1) % PlayersHand.Count;
+            NextPlayerIndex = (CurrentPlayerIndex + 1) % PlayersHand.Count;
+        }else{
+            CurrentPlayerIndex = (CurrentPlayerIndex + PlayersHand.Count - 1) % PlayersHand.Count;
+            NextPlayerIndex = (CurrentPlayerIndex + PlayersHand.Count - 1) % PlayersHand.Count;
+        }
+    }
+
+    public ICard PlayerDrawCard(Player player){
         var drawnCard = CardDeck.Draw();
-        PlayersHand[currentPlayer].Add(drawnCard);
+        PlayersHand[player].Add(drawnCard);
         return drawnCard;
     }
 
     public IEnumerable<IPlayer> SkipTurn(){ //TODO: SkipTurn
-        return new List<IPlayer>();
+        return [];
     }
 
 }

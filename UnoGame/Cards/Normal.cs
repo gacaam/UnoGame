@@ -12,7 +12,6 @@ public class Normal : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-
         return CardType.Zero;
     }
 

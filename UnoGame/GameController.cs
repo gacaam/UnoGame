@@ -8,7 +8,7 @@ public class GameController
 {
     public Action<IPlayer> OnTurnChange; 
     public Action<IPlayer> CallUNO;
-    public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;}
+    public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} = new();
     public Deck CardDeck {get; private set;} = new();
     public Stack<ICard> DiscardPile {get; private set;} = new();
     public ICard CurrentRevealedCard {get; private set;}
@@ -37,9 +37,9 @@ public class GameController
             playerName = Console.ReadLine();
 
             // Set default name if null input
-            playerName ??= $"Player{i}";
+            playerName = $"Player{i}";
             Player newPlayer = new(playerName, i);
-            
+        
             InsertPlayer(newPlayer);
             SetPlayerHand(newPlayer);
         }
@@ -60,17 +60,14 @@ public class GameController
         //TODO implement game play
         CurrentPlayerIndex = 0;
         List<IPlayer> playersList = PlayersHand.Keys.ToList();
-        while(true)
+        while(PlayersHand[CurrentPlayer].Count>0)
         {
             PlayerTurn(playersList);
-            if(PlayersHand[CurrentPlayer].Count==0){
-                break;
-            }
             NextTurn();
         }
     }
     public bool InsertPlayer(IPlayer player){
-        PlayersHand.Add(player, new List<ICard>());
+        PlayersHand.Add(player, []);
         return true;
     }
     public bool SetPlayerHand(IPlayer player){

@@ -1,59 +1,20 @@
 namespace UnoGame;
 using UnoGame.Enum;
 using UnoGame.Interface;
+using UnoGame.Cards;
 
 using System.Collections;
 using System.ComponentModel;
-using UnoGame.Cards;
 using System.Security.Cryptography.X509Certificates;
 
-public class Deck : IDeck
+public class Deck 
 {
-    public int ID {get;}
     public Stack<Card> Cards {get; set;} = [];
 
-    // constructors
-    public Deck(int id, Stack<Card> cards)
-    {
-        ID = id;
-        Cards = cards;
-    }
-    public Deck(Stack<Card> cards)
-    {
-        Cards = cards;
-    }
-
-    public Deck(int id)
-    {
-        ID = id;
-    }
-    // parameterless constructor
+    // constructor
     public Deck()
     {
-    }
-    public Stack<ICard> ShuffleDeck(Stack<ICard> cards)
-    {   
-        List<ICard> cardList = cards.ToList();
-        Stack<ICard> shuffledCards = [];
-        int count = cardList.Count;
-        Random r = new Random();
-
-        while(count>1)
-        {
-            int i = r.Next(count--);
-            var temp = cardList[i];
-            cardList[i] = cardList[count];
-            cardList[count] = temp;
-            shuffledCards.Push(cardList[count]);
-        }
-        return shuffledCards;
-    }
-    // public ICard Draw(){
-    //     return new Card();
-    // }c
-    public void GenerateDeck()
-    {                           
-        // Add four draw 4 & wild cards
+       // Add four draw 4 & wild cards
         for(int i=0; i<4; i++)
         {
             Cards.Push(new WildDrawFour(i, CardColor.Black, CardType.DrawTwo));
@@ -117,4 +78,33 @@ public class Deck : IDeck
             }
         }
     }
+
+    public Deck(Stack<Card> cards)
+    {
+        Cards = cards;
+    }
+
+    public Stack<ICard> ShuffleDeck(Stack<ICard> cards)
+    {   
+        List<ICard> cardList = cards.ToList();
+        Stack<ICard> shuffledCards = [];
+        int count = cardList.Count;
+        Random r = new Random();
+
+        while(count>1)
+        {
+            int i = r.Next(count--);
+            var temp = cardList[i];
+            cardList[i] = cardList[count];
+            cardList[count] = temp;
+            shuffledCards.Push(cardList[count]);
+        }
+        return shuffledCards;
+    }
+
+    public ICard Draw()
+    {
+        return Cards.Pop();
+    }
+
 }

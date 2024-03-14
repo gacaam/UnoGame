@@ -34,8 +34,9 @@ public class GameController
         return true;
     }
 
-    public ICard DrawCard(){
-        // .pop from deck stack
+    public ICard DrawCard(IPlayer player){
+        // temp = cards.pop
+        // playerHand.push(temp)
         return new Card();
     }
 

@@ -20,30 +20,7 @@ public class WildDrawFour : Card
             inputColor = Console.ReadLine();
         }
 
-        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Red"))
-        {
-            gameController.CurrentRevealedCard.Color = CardColor.Red;
-        }
-        
-        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Yellow"))
-        {
-            gameController.CurrentRevealedCard.Color = CardColor.Yellow;
-        }
-
-        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Green"))
-        {
-            gameController.CurrentRevealedCard.Color = CardColor.Green;
-        }
-        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Blue"))
-        {
-            gameController.CurrentRevealedCard.Color = CardColor.Blue;
-        }
-
-        Console.WriteLine("Draw four cards >:) \n");
-        for(int i=0; i<4; i++)
-        {
-            gameController.PlayerDrawCard(gameController.NextPlayer);
-        }
+        gameController.CurrentRevealedCard.Color = (CardColor)Enum.Parse(typeof(CardColor), inputColor);
         return CardType.DrawFour;
     }
 

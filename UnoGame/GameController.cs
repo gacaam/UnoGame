@@ -12,7 +12,7 @@ public class GameController
     public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} = new();
     public Deck CardDeck {get; private set;} = new();
     public Stack<ICard> DiscardPile {get; private set;} = new();
-    public ICard CurrentRevealedCard {get; private set;}
+    public ICard CurrentRevealedCard {get; set;}
     public GameRotation Rotation {get; private set;} = GameRotation.Clockwise;
     // public IPlayer[] WinnerOrder {get; private set;} //TODO: Winner Order
     public IPlayer CurrentPlayer{get; private set;}

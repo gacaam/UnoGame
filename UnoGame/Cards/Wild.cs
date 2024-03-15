@@ -20,24 +20,7 @@ public class Wild : Card
             inputColor = Console.ReadLine();
         }
 
-        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Red"))
-        {
-            gameController.CurrentRevealedCard.Color = CardColor.Red;
-        }
-        
-        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Yellow"))
-        {
-            gameController.CurrentRevealedCard.Color = CardColor.Yellow;
-        }
-
-        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Green"))
-        {
-            gameController.CurrentRevealedCard.Color = CardColor.Green;
-        }
-        if(Enum.Parse(typeof(CardColor), inputColor).Equals("Blue"))
-        {
-            gameController.CurrentRevealedCard.Color = CardColor.Blue;
-        }
+        gameController.CurrentRevealedCard.Color = (CardColor)Enum.Parse(typeof(CardColor), inputColor);
         return CardType.Wild;
     }
 }

@@ -19,4 +19,4 @@ An entire deck of cards is comprised of 108 cards with:
 - 4 Wild Cards 
 - 4 Wild Draw Four Cards
 
-![A Standard UNO Deck: 108 Cards in a Deck](assests/1195px-UNO_cards_deck.svg)
+![A Standard UNO Deck: 108 Cards in a Deck](https://github.com/gacaam/UnoGame/blob/main/assests/1195px-UNO_cards_deck.svg)

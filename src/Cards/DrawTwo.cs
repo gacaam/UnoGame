@@ -18,6 +18,7 @@ public class DrawTwo : Card
         {
             gameController.PlayerDrawCard(gameController.NextPlayer);
         }
+        gameController.NextTurn();
         Console.WriteLine("------------------------------------------------");
         return CardType.DrawFour;
     }

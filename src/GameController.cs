@@ -70,17 +70,16 @@ public class GameController
 
         Console.WriteLine("Starting Game!\n");
         Thread.Sleep(1500);
-        while(PlayersHand[CurrentPlayer].Count>0)
+        while(true)
         {
-            // if(PlayersHand[CurrentPlayer].Count>0){
-            //     Console.WriteLine($"Congratulations! {CurrentPlayer.Name} has won :D ");
-            //     break;
-            // }
+            if(PlayersHand[CurrentPlayer].Count==0){
+                Console.WriteLine($"Congratulations! {CurrentPlayer.Name} has won :D ");
+                break;
+            }
             PlayerTurn(playersList);
             NextTurn();
             CurrentPlayer = playersList[CurrentPlayerIndex];
         }
-        Console.WriteLine($"Congratulations! {CurrentPlayer.Name} has won :D ");
     }
 
     public bool InsertPlayer(IPlayer player){

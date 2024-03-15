@@ -14,7 +14,10 @@ public class WildDrawFour : Card
     {
         Console.WriteLine("------------------------------------------------");
         Console.WriteLine("Choose a color (Red, Yellow, Green, Blue): ");
-        var inputColor = Console.ReadLine();
+        var inputColor = Console.ReadLine(); 
+        //TODO: func.Invoke() in ExecuteCardEffect
+        //func in game controller 
+        //methods to subscribe in Program.cs
         object result;
         while(!Enum.TryParse(typeof(CardColor), inputColor, true, out result))
         {

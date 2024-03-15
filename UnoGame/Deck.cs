@@ -9,7 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 
 public class Deck 
 {
-    public Stack<ICard> Cards {get; set;} = [];
+    public Stack<ICard> Cards {get; set;} = []; //TODO: IDeck
 
     // constructor
     public Deck()

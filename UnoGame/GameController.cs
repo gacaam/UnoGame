@@ -6,14 +6,15 @@ using System.Security.Cryptography.X509Certificates;
 
 public class GameController
 {
-    public Action<IPlayer> OnTurnChange; 
-    public Action<IPlayer> CallUNO;
+    //TODO: Action in game
+    // public Action<IPlayer> OnTurnChange; 
+    // public Action<IPlayer> CallUNO;
     public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} = new();
     public Deck CardDeck {get; private set;} = new();
     public Stack<ICard> DiscardPile {get; private set;} = new();
     public ICard CurrentRevealedCard {get; private set;}
     public GameRotation Rotation {get; private set;} = GameRotation.Clockwise;
-    public IPlayer[] WinnerOrder {get; private set;}
+    // public IPlayer[] WinnerOrder {get; private set;} //TODO: Winner Order
     public IPlayer CurrentPlayer{get; private set;}
     public IPlayer NextPlayer{get; private set;}
     public int CurrentPlayerIndex {get; private set;}
@@ -33,7 +34,7 @@ public class GameController
         for(int i=0; i<numOfPlayers; i++)
         {
             Console.WriteLine($"\nEnter Player {i+1}'s Name:");
-            string playerName;
+            string? playerName;
             playerName = Console.ReadLine();
 
             // Set default name if null input
@@ -100,10 +101,6 @@ public class GameController
         return possibleCards;
     }
 
-    public IEnumerable<Player> GetWinnerOrder(){ //TODO: GetWinnerOrder
-        return [];
-    }
-
     public bool PlayerPlayCard(IPlayer player, ICard cardChosen){ 
         DiscardPile.Push(cardChosen);
         CurrentRevealedCard = cardChosen;
@@ -111,6 +108,13 @@ public class GameController
         Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), cardChosen.Type)} {Enum.GetName(typeof(CardColor), cardChosen.Color)}");
         var type =  cardChosen.ExecuteCardEffect(this);
           return true;
+    }
+    
+    public ICard PlayerDrawCard(IPlayer player){
+        var drawnCard = CardDeck.Draw();
+        PlayersHand[player].Add(drawnCard);
+        Console.WriteLine($"{player.Name} draws a card");
+        return drawnCard;
     }
 
     // public void AddTwoPenalty(){
@@ -208,10 +212,10 @@ public class GameController
             NextPlayerIndex = (CurrentPlayerIndex + PlayersHand.Count - 1) % PlayersHand.Count;
         }
     }
-    public ICard PlayerDrawCard(IPlayer player){
-        var drawnCard = CardDeck.Draw();
-        PlayersHand[player].Add(drawnCard);
-        Console.WriteLine($"{player.Name} draws a card");
-        return drawnCard;
-    }
+
+    //TODO: GetWinnerOrder
+    // public IEnumerable<Player> GetWinnerOrder(){ 
+    //     return [];
+    // }
+
 }

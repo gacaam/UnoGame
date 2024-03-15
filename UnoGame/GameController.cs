@@ -143,7 +143,7 @@ public class GameController
         List<ICard> possibleCards = GetPossibleCards(CurrentPlayer);
         List<ICard> otherCards = PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
 
-        Console.WriteLine($"\nLast Card Played:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
+        Console.WriteLine($"\nLast Card Played: {Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
         Console.WriteLine($"{CurrentPlayer.Name}'s turn\n");
 
         if(possibleCards.Count>0)
@@ -162,11 +162,11 @@ public class GameController
 
             var input = Console.ReadLine();
             int indexVal;
-            while(!int.TryParse(input, out indexVal) || indexVal > (possibleCards.Count-1)){
+            while(!int.TryParse(input, out indexVal) || indexVal-1 > possibleCards.Count){
                 Console.WriteLine("Try again... Choose only available cards by index (ex: 1)");
                 input = Console.ReadLine();
             }
-            PlayerPlayCard(CurrentPlayer, possibleCards[indexVal]);
+            PlayerPlayCard(CurrentPlayer, possibleCards[indexVal-1]);
 
         }else{
             Console.WriteLine("(No available cards to play)");

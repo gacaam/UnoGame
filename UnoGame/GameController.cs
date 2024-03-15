@@ -25,11 +25,11 @@ public class GameController
         CardDeck.Cards = CardDeck.ShuffleDeck();
 
         // Add players & deal players' cards
-        Console.WriteLine("Enter Number of Players (Max 4):");
+        Console.WriteLine("Enter Number of Players (2-4):");
         int numOfPlayers;
-        while(!int.TryParse(Console.ReadLine(), out numOfPlayers) || numOfPlayers > 4)
+        while(!int.TryParse(Console.ReadLine(), out numOfPlayers) || numOfPlayers > 4 || numOfPlayers == 1)
         {
-            Console.WriteLine("\nInvalid. Enter number of players again (max 4):");
+            Console.WriteLine("\nInvalid. Enter number of players again (2-4):");
         }
         for(int i=0; i<numOfPlayers; i++)
         {

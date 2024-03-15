@@ -14,13 +14,14 @@ public class Wild : Card
         Console.WriteLine("Change card color! \n");
         Console.WriteLine("Choose a color (Red, Yellow, Green, Blue): ");
         var inputColor = Console.ReadLine();
-        while(!Enum.IsDefined(typeof(CardColor), inputColor))
+        object result;
+        while(!Enum.TryParse(typeof(CardColor), inputColor, true, out result))
         {
             Console.WriteLine("Please choose again (Red, Yellow, Green, Blue): ");
             inputColor = Console.ReadLine();
         }
 
-        gameController.CurrentRevealedCard.Color = (CardColor)Enum.Parse(typeof(CardColor), inputColor);
+        gameController.CurrentRevealedCard.Color = (CardColor) result;
         return CardType.Wild;
     }
 }

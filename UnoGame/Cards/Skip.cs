@@ -12,7 +12,7 @@ public class Skip : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        Console.WriteLine($"Skipping {gameController.NextPlayer}'s turn!\n");
+        Console.WriteLine($"Skipping {gameController.NextPlayer.Name}'s turn!\n");
         gameController.NextTurn();
         return CardType.Skip;
     }

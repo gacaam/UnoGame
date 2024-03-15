@@ -57,8 +57,8 @@ public class GameController
         }
         DiscardPile.Push(firstCard);
         CurrentRevealedCard = firstCard;
-        Console.WriteLine($"\nFirst Card:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
-
+        Console.WriteLine($"\nFirst Card: {Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
+        Thread.Sleep(1500);
         // Game play
         // Set initial player and next player
         CurrentPlayerIndex = 0;
@@ -68,6 +68,7 @@ public class GameController
         NextPlayer =playersList[NextPlayerIndex];
 
         Console.WriteLine("Starting Game!\n");
+        Thread.Sleep(2000);
         while(PlayersHand[CurrentPlayer].Count>0)
         {
             PlayerTurn(playersList);

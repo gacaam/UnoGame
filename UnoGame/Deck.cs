@@ -18,7 +18,7 @@ public class Deck
 
         for(int i=0; i<4; i++)
         {
-            Cards.Push(new WildDrawFour(i, CardColor.Black, CardType.DrawTwo));
+            Cards.Push(new WildDrawFour(i, CardColor.Black, CardType.DrawFour));
             Cards.Push(new Wild(i, CardColor.Black, CardType.Wild));
         }
 

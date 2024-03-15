@@ -69,7 +69,7 @@ public class GameController
         NextPlayer =playersList[NextPlayerIndex];
 
         Console.WriteLine("Starting Game!\n");
-        Thread.Sleep(2000);
+        Thread.Sleep(1500);
         while(PlayersHand[CurrentPlayer].Count>0)
         {
             PlayerTurn(playersList);
@@ -94,7 +94,7 @@ public class GameController
     }
 
     public bool PossibleCard(ICard card){
-        return(card.Color == CurrentRevealedCard.Color || card.Type == CurrentRevealedCard.Type);
+        return(card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard.Type);
     }
     public List<ICard> GetPossibleCards(IPlayer player){ 
         List<ICard> possibleCards = PlayersHand[player].FindAll(PossibleCard);
@@ -151,8 +151,8 @@ public class GameController
         List<ICard> possibleCards = GetPossibleCards(CurrentPlayer);
         List<ICard> otherCards = PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
 
-        Console.WriteLine("================================================");
-        Console.WriteLine($"\nLast Card Played: {Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
+        Console.WriteLine("\n================================================");
+        Console.WriteLine($"Last Card Played: {Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}");
         Console.WriteLine("------------------------------------------------");
         Console.WriteLine($"{CurrentPlayer.Name}'s turn\n");
 

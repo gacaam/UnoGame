@@ -22,21 +22,21 @@ public class Wild : Card
 
         if(Enum.Parse(typeof(CardColor), inputColor).Equals("Red"))
         {
-            this.Color = CardColor.Red;
+            gameController.CurrentRevealedCard.Color = CardColor.Red;
         }
         
         if(Enum.Parse(typeof(CardColor), inputColor).Equals("Yellow"))
         {
-            this.Color = CardColor.Yellow;
+            gameController.CurrentRevealedCard.Color = CardColor.Yellow;
         }
 
         if(Enum.Parse(typeof(CardColor), inputColor).Equals("Green"))
         {
-            this.Color = CardColor.Green;
+            gameController.CurrentRevealedCard.Color = CardColor.Green;
         }
         if(Enum.Parse(typeof(CardColor), inputColor).Equals("Blue"))
         {
-            this.Color = CardColor.Blue;
+            gameController.CurrentRevealedCard.Color = CardColor.Blue;
         }
         return CardType.Wild;
     }

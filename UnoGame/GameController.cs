@@ -37,7 +37,7 @@ public class GameController
             playerName = Console.ReadLine();
 
             // Set default name if null input
-            playerName = $"Player{i+11}";
+            playerName ??= $"Player{i+11}";
             Player newPlayer = new(playerName, i);
         
             InsertPlayer(newPlayer);
@@ -143,7 +143,7 @@ public class GameController
         List<ICard> possibleCards = GetPossibleCards(CurrentPlayer);
         List<ICard> otherCards = PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
 
-        Console.WriteLine($"Last Card Played:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
+        Console.WriteLine($"\nLast Card Played:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
         Console.WriteLine($"{CurrentPlayer.Name}'s turn\n");
 
         if(possibleCards.Count>0)

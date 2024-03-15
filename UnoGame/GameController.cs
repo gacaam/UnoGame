@@ -24,7 +24,7 @@ public class GameController
         CardDeck.Cards = CardDeck.ShuffleDeck();
 
         // Add players & deal players' cards
-        Console.WriteLine("Enter number of players (max 4):");
+        Console.WriteLine("Enter Number of Players (Max 4):");
         int numOfPlayers;
         while(!int.TryParse(Console.ReadLine(), out numOfPlayers) || numOfPlayers > 4)
         {
@@ -32,7 +32,7 @@ public class GameController
         }
         for(int i=0; i<numOfPlayers; i++)
         {
-            Console.WriteLine($"\nEnter player {i+1}'s name:");
+            Console.WriteLine($"\nEnter Player {i+1}'s Name:");
             string playerName;
             playerName = Console.ReadLine();
 
@@ -59,10 +59,13 @@ public class GameController
         CurrentRevealedCard = firstCard;
         Console.WriteLine($"\nFirst Card:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
 
-        // Game Play
+        // Game play
+        // Set initial player and next player
         CurrentPlayerIndex = 0;
+        NextPlayerIndex = CurrentPlayerIndex + 1;
         List<IPlayer> playersList = PlayersHand.Keys.ToList();
         CurrentPlayer = playersList[CurrentPlayerIndex];
+        NextPlayer =playersList[NextPlayerIndex];
 
         Console.WriteLine("Starting Game!\n");
         while(PlayersHand[CurrentPlayer].Count>0)
@@ -177,13 +180,18 @@ public class GameController
                 var card = otherCards[i];
                 Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
             }
-            Console.WriteLine("");
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine("No cards to play... drawing card");
+            Thread.Sleep(2000);
             var newCard = PlayerDrawCard(CurrentPlayer);
+            Console.WriteLine("------------------------------------------------");
             Console.WriteLine($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)} {Enum.GetName(typeof(CardColor), newCard.Color)}");
             
             if(PossibleCard(newCard)){
+                Console.WriteLine("------------------------------------------------");
                 PlayerPlayCard(CurrentPlayer,newCard);
             }
+            Thread.Sleep(1500);
         }
         Console.WriteLine("================================================");
 
@@ -202,7 +210,7 @@ public class GameController
     public ICard PlayerDrawCard(IPlayer player){
         var drawnCard = CardDeck.Draw();
         PlayersHand[player].Add(drawnCard);
-        Console.WriteLine($"\n{player.Name} draws a card");
+        Console.WriteLine($"{player.Name} draws a card");
         return drawnCard;
     }
 }

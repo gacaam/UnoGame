@@ -70,18 +70,23 @@ public class GameController
 
         Console.WriteLine("Starting Game!\n");
         Thread.Sleep(1500);
-        while(PlayersHand[CurrentPlayer].Count>0)
+        while(true)
         {
+            if(PlayersHand[CurrentPlayer].Count>0){
+                Console.WriteLine($"Congratulations! {CurrentPlayer.Name} has won :D ");
+                break;
+            }
             PlayerTurn(playersList);
             NextTurn();
             CurrentPlayer = playersList[CurrentPlayerIndex];
         }
-        Console.WriteLine($"Congratulations! {CurrentPlayer.Name} has won :D ");
     }
+
     public bool InsertPlayer(IPlayer player){
         PlayersHand.Add(player, []);
         return true;
     }
+
     public bool SetPlayerHand(IPlayer player){
         for(int i=0; i<7; i++)
         {
@@ -89,6 +94,7 @@ public class GameController
         }
         return true;
     }
+
     public IEnumerable<ICard> GetPlayerHand(IPlayer player){
         return PlayersHand[player];
     }
@@ -96,6 +102,7 @@ public class GameController
     public bool PossibleCard(ICard card){
         return(card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard.Type);
     }
+
     public List<ICard> GetPossibleCards(IPlayer player){ 
         List<ICard> possibleCards = PlayersHand[player].FindAll(PossibleCard);
         return possibleCards;

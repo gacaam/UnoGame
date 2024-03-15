@@ -13,7 +13,7 @@ public abstract class Card : ICard
 
     public int ID{get; protected set;}
     public CardType Type{get; protected set;}
-    public CardColor Color{get; protected set;}
+    public CardColor Color{get; set;}
     public virtual CardType ExecuteCardEffect(GameController gameController)
     {
 

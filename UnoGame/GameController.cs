@@ -60,7 +60,6 @@ public class GameController
         Console.WriteLine($"\nFirst Card:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
 
         // Game Play
-        //TODO implement game play
         CurrentPlayerIndex = 0;
         List<IPlayer> playersList = PlayersHand.Keys.ToList();
         CurrentPlayer = playersList[CurrentPlayerIndex];
@@ -72,6 +71,7 @@ public class GameController
             NextTurn();
             CurrentPlayer = playersList[CurrentPlayerIndex];
         }
+        Console.WriteLine($"Congratulations! {CurrentPlayer.Name} has won :D ");
     }
     public bool InsertPlayer(IPlayer player){
         PlayersHand.Add(player, []);
@@ -103,9 +103,10 @@ public class GameController
     public bool PlayerPlayCard(IPlayer player, ICard cardChosen){ 
         DiscardPile.Push(cardChosen);
         CurrentRevealedCard = cardChosen;
+        PlayersHand[player].Remove(cardChosen);
+        Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), cardChosen.Type)} {Enum.GetName(typeof(CardColor), cardChosen.Color)}");
         var type =  cardChosen.ExecuteCardEffect(this);
-        Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), type)} {Enum.GetName(typeof(CardColor), cardChosen.Color)}");
-        return true;
+          return true;
     }
 
     // public void AddTwoPenalty(){
@@ -116,7 +117,6 @@ public class GameController
 
     //TODO: Action CallUNO
     public bool PlayerCallUNO(IPlayer player){
-        // event CallUNO
         Console.WriteLine($"{player.Name}: UNO!");
         if(PlayersHand[CurrentPlayer].Count == 1)
         {   
@@ -143,7 +143,9 @@ public class GameController
         List<ICard> possibleCards = GetPossibleCards(CurrentPlayer);
         List<ICard> otherCards = PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
 
+        Console.WriteLine("================================================");
         Console.WriteLine($"\nLast Card Played: {Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
+        Console.WriteLine("------------------------------------------------");
         Console.WriteLine($"{CurrentPlayer.Name}'s turn\n");
 
         if(possibleCards.Count>0)
@@ -175,14 +177,17 @@ public class GameController
                 var card = otherCards[i];
                 Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
             }
-        Console.WriteLine("");
-        var newCard = PlayerDrawCard(CurrentPlayer);
-        Console.WriteLine($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)} {Enum.GetName(typeof(CardColor), newCard.Color)}");
-        
-        if(PossibleCard(newCard)){
-            PlayerPlayCard(CurrentPlayer,newCard);
+            Console.WriteLine("");
+            var newCard = PlayerDrawCard(CurrentPlayer);
+            Console.WriteLine($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)} {Enum.GetName(typeof(CardColor), newCard.Color)}");
+            
+            if(PossibleCard(newCard)){
+                PlayerPlayCard(CurrentPlayer,newCard);
             }
         }
+        Console.WriteLine("================================================");
+
+        Thread.Sleep(2500);
     }
     public void NextTurn()
     {
@@ -197,7 +202,7 @@ public class GameController
     public ICard PlayerDrawCard(IPlayer player){
         var drawnCard = CardDeck.Draw();
         PlayersHand[player].Add(drawnCard);
-        Console.WriteLine("Draws a card");
+        Console.WriteLine($"\n{player.Name} draws a card");
         return drawnCard;
     }
 }

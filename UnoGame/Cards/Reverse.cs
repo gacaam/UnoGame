@@ -12,6 +12,7 @@ public class Reverse : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
+        Console.WriteLine("Reverse!\n");
         gameController.ChangeRotation();
         return CardType.Reverse;
     }

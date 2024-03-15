@@ -12,11 +12,11 @@ public class WildDrawFour : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        Console.WriteLine("Choose a color (red, yellow, green, blue): ");
+        Console.WriteLine("Choose a color (Red, Yellow, Green, Blue): ");
         var inputColor = Console.ReadLine();
         while(!Enum.IsDefined(typeof(CardColor), inputColor))
         {
-            Console.WriteLine("Please choose again (red, yellow, green, blue): ");
+            Console.WriteLine("Please choose again (Red, Yellow, Green, Blue): ");
             inputColor = Console.ReadLine();
         }
 
@@ -39,6 +39,7 @@ public class WildDrawFour : Card
             this.Color = CardColor.Blue;
         }
 
+        Console.WriteLine("Draw four cards >:) \n");
         for(int i=0; i<4; i++)
         {
             gameController.PlayerDrawCard(gameController.NextPlayer);

@@ -12,6 +12,7 @@ public class DrawTwo : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
+        Console.WriteLine("Draw two cards >:) \n");
         for(int i=0; i<2; i++)
         {
             gameController.PlayerDrawCard(gameController.NextPlayer);

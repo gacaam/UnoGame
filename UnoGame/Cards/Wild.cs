@@ -11,11 +11,12 @@ public class Wild : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        Console.WriteLine("Choose a color (red, yellow, green, blue): ");
+        Console.WriteLine("Change card color! \n");
+        Console.WriteLine("Choose a color (Red, Yellow, Green, Blue): ");
         var inputColor = Console.ReadLine();
         while(!Enum.IsDefined(typeof(CardColor), inputColor))
         {
-            Console.WriteLine("Please choose again (red, yellow, green, blue): ");
+            Console.WriteLine("Please choose again (Red, Yellow, Green, Blue): ");
             inputColor = Console.ReadLine();
         }
 

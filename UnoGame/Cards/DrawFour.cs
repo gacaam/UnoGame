@@ -12,6 +12,7 @@ public class WildDrawFour : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
+        Console.WriteLine("------------------------------------------------");
         Console.WriteLine("Choose a color (Red, Yellow, Green, Blue): ");
         var inputColor = Console.ReadLine();
         object result;
@@ -20,8 +21,14 @@ public class WildDrawFour : Card
             Console.WriteLine("Please choose again (Red, Yellow, Green, Blue): ");
             inputColor = Console.ReadLine();
         }
-
+        Console.WriteLine("------------------------------------------------");
+        Console.WriteLine("Draw four cards >:) \n");
+        for(int i=0; i<4; i++)
+        {
+            gameController.PlayerDrawCard(gameController.NextPlayer);
+        }
         gameController.CurrentRevealedCard.Color = (CardColor) result;
+        Console.WriteLine("------------------------------------------------");
         return CardType.DrawFour;
     }
 

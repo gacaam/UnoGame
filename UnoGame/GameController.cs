@@ -21,7 +21,7 @@ public class GameController
     public GameController()
     {
         // Shuffle Deck
-        CardDeck.ShuffleDeck();
+        CardDeck.Cards = CardDeck.ShuffleDeck();
 
         // Add players & deal players' cards
         Console.WriteLine("Enter number of players (max 4):");
@@ -37,7 +37,7 @@ public class GameController
             playerName = Console.ReadLine();
 
             // Set default name if null input
-            playerName = $"Player{i}";
+            playerName = $"Player{i+11}";
             Player newPlayer = new(playerName, i);
         
             InsertPlayer(newPlayer);
@@ -50,25 +50,27 @@ public class GameController
         // First card cannot be a wild card
         while(firstCard.Color == CardColor.Black)
         {
-            Console.WriteLine("Oops, wild card. Draw again!");
+            Console.WriteLine("\nOops, wild card. Draw again!");
             CardDeck.Cards.Push(firstCard);
             CardDeck.Cards = CardDeck.ShuffleDeck();
             firstCard = CardDeck.Draw();
         }
         DiscardPile.Push(firstCard);
         CurrentRevealedCard = firstCard;
-        Console.WriteLine($"First Card:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
+        Console.WriteLine($"\nFirst Card:\t{Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
 
         // Game Play
         //TODO implement game play
         CurrentPlayerIndex = 0;
         List<IPlayer> playersList = PlayersHand.Keys.ToList();
+        CurrentPlayer = playersList[CurrentPlayerIndex];
 
         Console.WriteLine("Starting Game!\n");
         while(PlayersHand[CurrentPlayer].Count>0)
         {
             PlayerTurn(playersList);
             NextTurn();
+            CurrentPlayer = playersList[CurrentPlayerIndex];
         }
     }
     public bool InsertPlayer(IPlayer player){

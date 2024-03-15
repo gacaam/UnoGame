@@ -15,6 +15,7 @@ public class Deck
     public Deck()
     {
        // Add four draw 4 & wild cards
+
         for(int i=0; i<4; i++)
         {
             Cards.Push(new WildDrawFour(i, CardColor.Black, CardType.DrawTwo));
@@ -99,7 +100,8 @@ public class Deck
             cardList[count] = temp;
             shuffledCards.Push(cardList[count]);
         }
-        return shuffledCards;
+        Cards = shuffledCards;
+        return Cards;
     }
 
     public ICard Draw()

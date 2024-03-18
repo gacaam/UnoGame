@@ -7,9 +7,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.Security.Cryptography.X509Certificates;
 
-public class Deck 
+public class Deck : IDeck
 {
-    public Stack<ICard> Cards {get; set;} = []; //TODO: IDeck
+    public Stack<ICard> Cards {get; set;} = [];
 
     // constructor
     public Deck()

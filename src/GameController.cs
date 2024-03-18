@@ -9,40 +9,39 @@ public class GameController
     //TODO: Action in game
     // public Action<IPlayer> OnTurnChange; 
     // public Action<IPlayer> CallUNO;
-    public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} = new();
-    public Deck CardDeck {get; private set;} = new();
-    public Stack<ICard> DiscardPile {get; private set;} = new();
-    public ICard CurrentRevealedCard {get; set;}
+    public Func<string, string> getInput; //TODO
     public GameRotation Rotation {get; private set;} = GameRotation.Clockwise;
+    public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} = new();
+    public Stack<ICard> DiscardPile {get; private set;} = new();
+    public IDeck CardDeck {get; private set;} 
+    public ICard CurrentRevealedCard {get; set;}
     // public IPlayer[] WinnerOrder {get; private set;} //TODO: Winner Order
     public IPlayer CurrentPlayer{get; private set;}
     public IPlayer NextPlayer{get; private set;}
     public int CurrentPlayerIndex {get; private set;}
     public int NextPlayerIndex {get; private set;}
-    public GameController()
+    public GameController(IDeck deck, int numOfPlayers)
     {
         // Shuffle Deck
+        Deck CardDeck = new();
         CardDeck.Cards = CardDeck.ShuffleDeck();
 
         // Add players & deal players' cards
-        Console.WriteLine("Enter Number of Players (2-4):");
-        int numOfPlayers;
-        while(!int.TryParse(Console.ReadLine(), out numOfPlayers) || numOfPlayers > 4 || numOfPlayers == 1)
-        {
-            Console.WriteLine("\nInvalid. Enter number of players again (2-4):");
-        }
         for(int i=0; i<numOfPlayers; i++)
         {
             Console.WriteLine($"\nEnter Player {i+1}'s Name:");
             string? playerName;
             playerName = Console.ReadLine();
 
-            // Set default name if null input
-            playerName ??= $"Player{i+11}";
+            // Set default name if input is empty
+            if(String.IsNullOrEmpty(playerName))
+            {
+                playerName = $"Player{i+1}";
+            }
             Player newPlayer = new(playerName, i);
         
             InsertPlayer(newPlayer);
-            SetPlayerHand(newPlayer);
+            SetPlayerHand(newPlayer, 7);
         }
 
         // Initial discard card
@@ -66,7 +65,7 @@ public class GameController
         NextPlayerIndex = CurrentPlayerIndex + 1;
         List<IPlayer> playersList = PlayersHand.Keys.ToList();
         CurrentPlayer = playersList[CurrentPlayerIndex];
-        NextPlayer =playersList[NextPlayerIndex];
+        NextPlayer = playersList[NextPlayerIndex];
 
         Console.WriteLine("Starting Game!\n");
         Thread.Sleep(1500);
@@ -87,8 +86,8 @@ public class GameController
         return true;
     }
 
-    public bool SetPlayerHand(IPlayer player){
-        for(int i=0; i<7; i++)
+    public bool SetPlayerHand(IPlayer player, int numOfCards){
+        for(int i=0; i<numOfCards; i++)
         {
             PlayersHand[player].Add(CardDeck.Cards.Pop());
         }
@@ -123,12 +122,6 @@ public class GameController
         Console.WriteLine($"{player.Name} draws a card");
         return drawnCard;
     }
-
-    // public void AddTwoPenalty(){
-    //     Console.WriteLine($"{currentPlayer.Name} draws 2 card.");
-    //     DrawCard();
-    //     DrawCard();
-    // }
 
     //TODO: Action CallUNO
     public bool PlayerCallUNO(IPlayer player){

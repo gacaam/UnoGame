@@ -7,12 +7,12 @@ public class GameController
     public Action<string> GameInfo;
     public Action Divider;
     public GameRotation Rotation {get; private set;}
-    public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} 
-    public List<IPlayer> players;
     public Stack<ICard> DiscardPile {get; private set;} 
     public IDeck CardDeck {get; private set;} 
     public ICard CurrentRevealedCard {get; set;}
-    public IPlayer[] WinnerOrder {get; private set;} //TODO: Winner Order
+    public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} 
+    public List<IPlayer> players;
+    public IEnumerable<IPlayer> WinnerOrder {get; private set;} //TODO: Winner Order
     public IPlayer CurrentPlayer{get; private set;}
     public IPlayer NextPlayer{get; private set;}
     public int CurrentPlayerIndex {get; private set;}
@@ -43,6 +43,7 @@ public class GameController
             InsertPlayer(newPlayer);
             SetPlayerHand(newPlayer, 7);
         }
+
         players = PlayersHand.Keys.ToList();
 
         // Initial discard card
@@ -211,8 +212,9 @@ public class GameController
     }
 
     //TODO: GetWinnerOrder
-    // public IEnumerable<IPlayer> GetWinnerOrder(){ 
-    //     var WinnerOrder = PlayersHand.OrderBy(player => player.Value.Count);
-    // }
-
+    public IEnumerable<IPlayer> GetWinnerOrder(){ 
+        WinnerOrder = PlayersHand.OrderBy(player => player.Value.Count).
+                        ToDictionary(player => player.Key, player => player.Value).Keys.ToList();
+        return WinnerOrder;
+    }
 }

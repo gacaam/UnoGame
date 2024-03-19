@@ -1,37 +1,38 @@
 namespace UnoGame;
-using UnoGame.Interface;
-using UnoGame.Enums;
-using UnoGame.Cards;
-using System.Security.Cryptography.X509Certificates;
 
 public class GameController
 {
-    //TODO: Action in game
-    // public Action<IPlayer> OnTurnChange; 
-    // public Action<IPlayer> CallUNO;
-    public Func<string, string> getInput; //TODO
-    public GameRotation Rotation {get; private set;} = GameRotation.Clockwise;
-    public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} = new();
-    public Stack<ICard> DiscardPile {get; private set;} = new();
+    public Func<string, string> GetInput; 
+    public Action OnTurnChange;
+    public Action<string> GameInfo;
+    public Action Divider;
+    public GameRotation Rotation {get; private set;}
+    public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} 
+    public List<IPlayer> players;
+    public Stack<ICard> DiscardPile {get; private set;} 
     public IDeck CardDeck {get; private set;} 
     public ICard CurrentRevealedCard {get; set;}
-    // public IPlayer[] WinnerOrder {get; private set;} //TODO: Winner Order
+    public IPlayer[] WinnerOrder {get; private set;} //TODO: Winner Order
     public IPlayer CurrentPlayer{get; private set;}
     public IPlayer NextPlayer{get; private set;}
     public int CurrentPlayerIndex {get; private set;}
     public int NextPlayerIndex {get; private set;}
-    public GameController(IDeck deck, int numOfPlayers)
+    public GameController()
     {
-        // Shuffle Deck
-        Deck CardDeck = new();
+        // Initialization
+        DiscardPile = new();
+        PlayersHand = new();
+        Rotation = GameRotation.Clockwise;
+        CardDeck = new Deck();
         CardDeck.Cards = CardDeck.ShuffleDeck();
-
+        OnTurnChange = ChangeCurrentPlayer;
+    }
+    public async Task StartGame(int numOfPlayers)
+    {
         // Add players & deal players' cards
         for(int i=0; i<numOfPlayers; i++)
         {
-            Console.WriteLine($"\nEnter Player {i+1}'s Name:");
-            string? playerName;
-            playerName = Console.ReadLine();
+            string playerName = GetInput.Invoke($"Enter Player {i+1}'s Name:");
 
             // Set default name if input is empty
             if(String.IsNullOrEmpty(playerName))
@@ -39,59 +40,64 @@ public class GameController
                 playerName = $"Player{i+1}";
             }
             Player newPlayer = new(playerName, i);
-        
             InsertPlayer(newPlayer);
             SetPlayerHand(newPlayer, 7);
         }
+        players = PlayersHand.Keys.ToList();
 
         // Initial discard card
         var firstCard = CardDeck.Draw();
+        GameInfo.Invoke("Drawing first card..");
 
         // First card cannot be a wild card
         while(firstCard.Color == CardColor.Black)
         {
-            Console.WriteLine("\nOops, wild card. Draw again!");
+            GameInfo.Invoke("Oops, wild card. Draw again!");
+            await Task.Delay(1000);
             CardDeck.Cards.Push(firstCard);
             CardDeck.Cards = CardDeck.ShuffleDeck();
             firstCard = CardDeck.Draw();
         }
+
         DiscardPile.Push(firstCard);
         CurrentRevealedCard = firstCard;
-        Console.WriteLine($"\nFirst Card: {Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}\n");
-        Thread.Sleep(1500);
+        GameInfo.Invoke($"First Card: {Enum.GetName(typeof(CardType), firstCard.Type)} {Enum.GetName(typeof(CardColor), firstCard.Color)}");
+        await Task.Delay(1500);
+
         // Game play
         // Set initial player and next player
         CurrentPlayerIndex = 0;
         NextPlayerIndex = CurrentPlayerIndex + 1;
-        List<IPlayer> playersList = PlayersHand.Keys.ToList();
-        CurrentPlayer = playersList[CurrentPlayerIndex];
-        NextPlayer = playersList[NextPlayerIndex];
+        CurrentPlayer = players[CurrentPlayerIndex];
+        NextPlayer = players[NextPlayerIndex];
 
-        Console.WriteLine("Starting Game!\n");
-        Thread.Sleep(1500);
+        GameInfo.Invoke("Starting Game!");
+        await Task.Delay(1500);
         while(true)
         {
             if(PlayersHand[CurrentPlayer].Count==0){
-                Console.WriteLine($"Congratulations! {CurrentPlayer.Name} has won :D ");
+                GameInfo.Invoke($"Congratulations! {CurrentPlayer.Name} has won :D ");
                 break;
             }
-            PlayerTurn(playersList);
-            NextTurn();
-            CurrentPlayer = playersList[CurrentPlayerIndex];
+            await PlayerTurn();
+            OnTurnChange.Invoke();
         }
     }
 
-    public bool InsertPlayer(IPlayer player){
+    public void InsertPlayer(IPlayer player){
         PlayersHand.Add(player, []);
-        return true;
     }
 
     public bool SetPlayerHand(IPlayer player, int numOfCards){
+        if(!PlayersHand.ContainsKey(player))
+        {
+            return false;
+        }
         for(int i=0; i<numOfCards; i++)
         {
             PlayersHand[player].Add(CardDeck.Cards.Pop());
         }
-        return true;
+        return true; 
     }
 
     public IEnumerable<ICard> GetPlayerHand(IPlayer player){
@@ -99,7 +105,7 @@ public class GameController
     }
 
     public bool PossibleCard(ICard card){
-        return(card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard.Type);
+        return card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard.Type;
     }
 
     public List<ICard> GetPossibleCards(IPlayer player){ 
@@ -108,101 +114,90 @@ public class GameController
     }
 
     public bool PlayerPlayCard(IPlayer player, ICard cardChosen){ 
+        if(!PlayersHand.ContainsKey(player))
+        {
+            return false;
+        }
+
+        if(!PlayersHand[player].Contains(cardChosen))
+        {
+            return false;
+        }
+
         DiscardPile.Push(cardChosen);
         CurrentRevealedCard = cardChosen;
         PlayersHand[player].Remove(cardChosen);
-        Console.WriteLine($"{player.Name} plays {Enum.GetName(typeof(CardType), cardChosen.Type)} {Enum.GetName(typeof(CardColor), cardChosen.Color)}");
-        var type =  cardChosen.ExecuteCardEffect(this);
-          return true;
+
+        GameInfo.Invoke($"{player.Name} plays {Enum.GetName(typeof(CardType), cardChosen.Type)} {Enum.GetName(typeof(CardColor), cardChosen.Color)}");
+        cardChosen.ExecuteCardEffect(this);
+        return true;
     }
     
     public ICard PlayerDrawCard(IPlayer player){
         var drawnCard = CardDeck.Draw();
         PlayersHand[player].Add(drawnCard);
-        Console.WriteLine($"{player.Name} draws a card");
+        GameInfo.Invoke($"{player.Name} draws a card");
         return drawnCard;
     }
 
-    //TODO: Action CallUNO
-    public bool PlayerCallUNO(IPlayer player){
-        Console.WriteLine($"{player.Name}: UNO!");
-        if(PlayersHand[CurrentPlayer].Count == 1)
-        {   
-            Console.WriteLine("Successful UNO challenge >:)");
-            return true;
-        }
-        Console.WriteLine($"Oops! False challenge... {player.Name} still has more than 1 card.");
-        return false;
-    }
-
-    public bool ChangeRotation(){
+    public void ChangeRotation(){
         if(Rotation == GameRotation.Clockwise){
             Rotation = GameRotation.CounterClockwise;
         }else{
             Rotation = GameRotation.Clockwise;
         }
-        return true;
     }
 
-    public void PlayerTurn(List<IPlayer> players){
-        Console.Clear();
-        CurrentPlayer = players[CurrentPlayerIndex];
-        NextPlayer = players[NextPlayerIndex];
+    public async Task PlayerTurn(){
         List<ICard> possibleCards = GetPossibleCards(CurrentPlayer);
         List<ICard> otherCards = PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
 
-        Console.WriteLine("\n================================================");
-        Console.WriteLine($"Last Card Played: {Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}");
-        Console.WriteLine("------------------------------------------------");
-        Console.WriteLine($"{CurrentPlayer.Name}'s turn\n");
+        GameInfo.Invoke($"Last Card Played: {Enum.GetName(typeof(CardType), CurrentRevealedCard.Type)} {Enum.GetName(typeof(CardColor), CurrentRevealedCard.Color)}");
+        GameInfo.Invoke($"{CurrentPlayer.Name}'s turn");
 
         if(possibleCards.Count>0)
         {
-            Console.WriteLine("(Available cards)");
+            GameInfo.Invoke("(Available cards)");
             for(int i = 0; i < possibleCards.Count; i++){
                 var card = possibleCards[i];
-                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
+                GameInfo.Invoke($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
             }
-            Console.WriteLine("(Other cards in hand)");
+
+            GameInfo.Invoke("(Other cards in hand)");
             for(int i = 0; i < otherCards.Count; i++){
                 var card = otherCards[i];
-                Console.WriteLine($"\t{i+possibleCards.Count+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
+                GameInfo.Invoke($"\t{i+possibleCards.Count+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
             }
-            Console.WriteLine("\nChoose a card by index: ");
 
-            var input = Console.ReadLine();
+            var input = GetInput.Invoke("Choose a card by index: ");
             int indexVal;
             while(!int.TryParse(input, out indexVal) || indexVal-1 > possibleCards.Count){
-                Console.WriteLine("Try again... Choose only available cards by index (ex: 1)");
-                input = Console.ReadLine();
+                input = GetInput.Invoke("Try again... Choose only available cards by index (ex: 1)");
             }
             PlayerPlayCard(CurrentPlayer, possibleCards[indexVal-1]);
 
         }else{
-            Console.WriteLine("(No available cards to play)");
-            Console.WriteLine("(Cards in hand)");
+            GameInfo.Invoke("(No available cards to play)");
+            GameInfo.Invoke("(Cards in hand)");
             for(int i = 0; i < otherCards.Count; i++){
                 var card = otherCards[i];
-                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
+                GameInfo.Invoke($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
             }
-            Console.WriteLine("------------------------------------------------");
-            Console.WriteLine("No cards to play... drawing card");
-            Thread.Sleep(2000);
+
+            GameInfo.Invoke("No cards to play... drawing card");
+            await Task.Delay(2000);
             var newCard = PlayerDrawCard(CurrentPlayer);
-            Console.WriteLine("------------------------------------------------");
-            Console.WriteLine($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)} {Enum.GetName(typeof(CardColor), newCard.Color)}");
+            GameInfo.Invoke($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)} {Enum.GetName(typeof(CardColor), newCard.Color)}");
             
             if(PossibleCard(newCard)){
-                Console.WriteLine("------------------------------------------------");
                 PlayerPlayCard(CurrentPlayer,newCard);
             }
-            Thread.Sleep(1500);
+            await Task.Delay(1500);
         }
-        Console.WriteLine("================================================");
-
-        Thread.Sleep(2500);
+        await Task.Delay(2500);
     }
-    public void NextTurn()
+    
+    public void ChangeCurrentPlayer()
     {
         if(Rotation == GameRotation.Clockwise){
             CurrentPlayerIndex = (CurrentPlayerIndex + 1) % PlayersHand.Count;
@@ -211,11 +206,13 @@ public class GameController
             CurrentPlayerIndex = (CurrentPlayerIndex + PlayersHand.Count - 1) % PlayersHand.Count;
             NextPlayerIndex = (CurrentPlayerIndex + PlayersHand.Count - 1) % PlayersHand.Count;
         }
+        CurrentPlayer = players[CurrentPlayerIndex];
+        NextPlayer = players[NextPlayerIndex];
     }
 
     //TODO: GetWinnerOrder
-    // public IEnumerable<Player> GetWinnerOrder(){ 
-    //     return [];
+    // public IEnumerable<IPlayer> GetWinnerOrder(){ 
+    //     var WinnerOrder = PlayersHand.OrderBy(player => player.Value.Count);
     // }
 
 }

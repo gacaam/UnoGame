@@ -1,5 +1,4 @@
-namespace UnoGame.Cards;
-using UnoGame.Enums;
+namespace UnoGame;
 
 public class Wild : Card
 {
@@ -11,18 +10,17 @@ public class Wild : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        Console.WriteLine("------------------------------------------------");
-        Console.WriteLine("Change color!");
-        Console.WriteLine("Choose a color (Red, Yellow, Green, Blue): ");
-        var inputColor = Console.ReadLine();
-        object result;
+        gameController.Divider.Invoke();    
+        gameController.GameInfo.Invoke("Change color!");
+
+        var inputColor = gameController.GetInput.Invoke("Choose a color (Red, Yellow, Green, Blue): ");
+        object? result;
         while(!Enum.TryParse(typeof(CardColor), inputColor, true, out result))
         {
-            Console.WriteLine("Please choose again (Red, Yellow, Green, Blue): ");
-            inputColor = Console.ReadLine();
+            inputColor = gameController.GetInput.Invoke("Please choose again (Red, Yellow, Green, Blue): ");
         }
         gameController.CurrentRevealedCard.Color = (CardColor) result;
-        Console.WriteLine("------------------------------------------------");
+        gameController.Divider.Invoke();
         return CardType.Wild;
     }
 }

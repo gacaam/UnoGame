@@ -1,4 +1,4 @@
-namespace UnoGame.Interface;
+namespace UnoGame;
 
 public interface IDeck
 {

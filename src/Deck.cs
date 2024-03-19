@@ -1,7 +1,4 @@
 namespace UnoGame;
-using UnoGame.Enums;
-using UnoGame.Interface;
-using UnoGame.Cards;
 
 using System.Collections;
 using System.ComponentModel;

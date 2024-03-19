@@ -1,6 +1,4 @@
-namespace UnoGame.Cards;
-using UnoGame.Enums;
-using UnoGame.Interface;
+namespace UnoGame;
 
 public class Normal : Card
 {

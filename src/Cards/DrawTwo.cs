@@ -1,6 +1,4 @@
-namespace UnoGame.Cards;
-using UnoGame.Enums;
-using UnoGame.Interface;
+namespace UnoGame;
 
 public class DrawTwo : Card
 {
@@ -12,14 +10,14 @@ public class DrawTwo : Card
     }
     public override CardType ExecuteCardEffect(GameController gameController)
     {
-        Console.WriteLine("------------------------------------------------");
-        Console.WriteLine("Draw two cards >:) \n");
+        gameController.Divider.Invoke();
+        gameController.GameInfo.Invoke("Draw two cards >:) \n");
         for(int i=0; i<2; i++)
         {
             gameController.PlayerDrawCard(gameController.NextPlayer);
         }
-        gameController.NextTurn();
-        Console.WriteLine("------------------------------------------------");
+        gameController.ChangeCurrentPlayer();
+        gameController.Divider.Invoke();
         return CardType.DrawFour;
     }
 

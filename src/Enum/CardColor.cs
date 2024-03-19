@@ -1,4 +1,4 @@
-namespace UnoGame.Enums;
+namespace UnoGame;
 
 public enum CardColor{
     Black,

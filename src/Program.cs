@@ -1,9 +1,9 @@
 ﻿using UnoGame;
-using UnoGame.Interface;
 
 class Program
 {
-    static void Main()
+    // Console App Implementation
+    static async Task Main()
     {   
         // insert players
         int numOfPlayers;
@@ -12,15 +12,32 @@ class Program
         {
             Console.WriteLine("\nInvalid. Enter number of players again (2-4):");
         }
+        // action and function subscriptions
+        GameController gameControl = new();
+        gameControl.GetInput = GetConsoleInput;
+        gameControl.GameInfo = ConsolePrint;
+        gameControl.Divider = ConsoleDivider;
+        gameControl.OnTurnChange += ConsoleTurnDivider;
 
-        // input players' names
-
-        GameController gameControl = new(new Deck(), numOfPlayers);
+        // start game
+        await gameControl.StartGame(numOfPlayers);
     }
 
-    public static void ConsoleTurnDivider()
+    public static void ConsolePrint(string inputString)
     {
-        Console.WriteLine("================================================");
+        Console.WriteLine(inputString);
+    }
+
+    public static string GetConsoleInput(string description)
+    {
+        Console.WriteLine("");
+        Console.WriteLine(description);
+        string consoleInput = Console.ReadLine(); 
+        if(String.IsNullOrEmpty(consoleInput))
+        {
+            return String.Empty;
+        }
+        return consoleInput;
     }
 
     public static void ConsoleDivider()
@@ -28,6 +45,10 @@ class Program
         Console.WriteLine("------------------------------------------------");
     }
 
-
+    public static void ConsoleTurnDivider()
+    {
+        Console.Clear();
+        Console.WriteLine("================================================");
+    }
 
 }

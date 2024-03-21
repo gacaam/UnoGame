@@ -27,9 +27,10 @@ public class GameController
         CardDeck.Cards = CardDeck.ShuffleDeck();
         OnTurnChange = ChangeCurrentPlayer;
     }
-    public async Task StartGame(int numOfPlayers)
+
+    public List<IPlayer> AddPlayers(int numOfPlayers)
     {
-        // Add players & deal players' cards
+        // Add players
         for(int i=0; i<numOfPlayers; i++)
         {
             string playerName = GetInput.Invoke($"Enter Player {i+1}'s Name:");
@@ -41,10 +42,19 @@ public class GameController
             }
             Player newPlayer = new(playerName, i);
             InsertPlayer(newPlayer);
-            SetPlayerHand(newPlayer, 7);
         }
+        return PlayersHand.Keys.ToList();
+    }
 
-        players = PlayersHand.Keys.ToList();
+    public async Task StartGame(int numOfPlayers)
+    {
+        players = AddPlayers(numOfPlayers);
+
+        // Deal cards
+        foreach(IPlayer player in players)
+        {
+            SetPlayerHand(player, 7);
+        }
 
         // Initial discard card
         var firstCard = CardDeck.Draw();
@@ -76,14 +86,9 @@ public class GameController
         await Task.Delay(1500);
         while(true)
         {
-            if(PlayersHand[CurrentPlayer].Count==0){
+            if(PlayersHand[CurrentPlayer].Count==0)
+            {
                 WinnerOrder = GetWinnerOrder();
-                GameInfo.Invoke($"{CurrentPlayer.Name} has won.");
-
-                for(int i = 1; i <= WinnerOrder.Count(); i++)
-                {
-
-                }
                 break;
             }
             await PlayerTurn();
@@ -222,7 +227,6 @@ public class GameController
         NextPlayer = players[NextPlayerIndex];
     }
 
-   
     public IEnumerable<IPlayer> GetWinnerOrder(){ 
         WinnerOrder = PlayersHand.OrderBy(player => player.Value.Count).
                         ToDictionary(player => player.Key, player => player.Value).Keys.ToList();

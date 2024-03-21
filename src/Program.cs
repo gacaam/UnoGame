@@ -21,6 +21,14 @@ class Program
 
         // start game
         await gameControl.StartGame(numOfPlayers);
+        Console.WriteLine($"Game Winner: {gameControl.WinnerOrder.First().Name}");
+        int count = 1;
+        Console.WriteLine("\n[Rank]");
+        foreach(IPlayer player in gameControl.WinnerOrder)
+        {
+            Console.WriteLine($"{count}. {player.Name}");
+            count++;
+        }
     }
 
     public static void ConsolePrint(string inputString)

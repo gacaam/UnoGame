@@ -12,6 +12,10 @@ public class Reverse : Card
         gameController.Divider.Invoke();    
         gameController.GameInfo.Invoke("Reverse!\n");
         gameController.ChangeRotation();
+        if(gameController.players.Count == 2)
+        {
+            gameController.ChangeCurrentPlayer();
+        }
         gameController.Divider.Invoke();    
         return CardType.Reverse;
     }

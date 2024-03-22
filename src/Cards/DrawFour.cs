@@ -26,6 +26,7 @@ public class WildDrawFour : Card
         }
 
         gameController.CurrentRevealedCard.Color = (CardColor) result;
+        gameController.ChangeCurrentPlayer();
         gameController.Divider.Invoke();
         return CardType.DrawFour;
     }

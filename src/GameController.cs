@@ -48,6 +48,10 @@ public class GameController
 
     public async Task<ICard> GamePrep(int numOfPlayers)
     {
+        if(numOfPlayers < 2)
+        {
+            throw new Exception("Not enough players. Need at least 2.");
+        }
         players = AddPlayers(numOfPlayers);
 
         // Deal cards

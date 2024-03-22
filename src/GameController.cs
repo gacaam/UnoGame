@@ -50,7 +50,7 @@ public class GameController
     {
         if(numOfPlayers < 2)
         {
-            throw new Exception("Not enough players. Need at least 2.");
+            throw new ArgumentException("Not enough players, need at least 2.");
         }
         players = AddPlayers(numOfPlayers);
 

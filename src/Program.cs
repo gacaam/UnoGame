@@ -20,7 +20,9 @@ class Program
         gameControl.OnTurnChange += ConsoleTurnDivider;
 
         // start game
-        await gameControl.StartGame(numOfPlayers);
+        await gameControl.GamePrep(numOfPlayers);
+        await gameControl.StartGame();
+
         Console.WriteLine($"Game Winner: {gameControl.WinnerOrder.First().Name}");
         int count = 1;
         Console.WriteLine("\n[Rank]");

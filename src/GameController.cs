@@ -12,7 +12,7 @@ public class GameController
     public ICard CurrentRevealedCard {get; set;}
     public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} 
     public List<IPlayer> players;
-    public IEnumerable<IPlayer> WinnerOrder {get; private set;} //TODO: Winner Order
+    public IEnumerable<IPlayer> WinnerOrder {get; private set;} 
     public IPlayer CurrentPlayer{get; private set;}
     public IPlayer NextPlayer{get; private set;}
     public int CurrentPlayerIndex {get; private set;}
@@ -46,7 +46,7 @@ public class GameController
         return PlayersHand.Keys.ToList();
     }
 
-    public async Task StartGame(int numOfPlayers)
+    public async Task<ICard> GamePrep(int numOfPlayers)
     {
         players = AddPlayers(numOfPlayers);
 
@@ -75,6 +75,11 @@ public class GameController
         GameInfo.Invoke($"First Card: {Enum.GetName(typeof(CardType), firstCard.Type)} {Enum.GetName(typeof(CardColor), firstCard.Color)}");
         await Task.Delay(1500);
 
+        return firstCard;
+    }
+
+    public async Task StartGame()
+    {
         // Game play
         // Set initial player and next player
         CurrentPlayerIndex = 0;

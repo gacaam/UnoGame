@@ -69,9 +69,9 @@ class Program
         var otherCards = gc.PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
         
         Console.Clear();
-        Console.WriteLine("================================================");
         Console.WriteLine($"Last Card Played:");
         UserInterface.DisplayCard(CurrentRevealedCard);
+        Console.WriteLine("================================================");
         Console.WriteLine($"{CurrentPlayer.Name}'s turn");
         ConsoleDivider();
 
@@ -80,13 +80,15 @@ class Program
             Console.WriteLine("(Available cards)");
             for(int i = 0; i < possibleCards.Count(); i++){
                 var card = possibleCards.ElementAt(i);
-                Console.WriteLine($"\t{i + 1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
+                Console.WriteLine($"\t{i + 1}. " + UserInterface.CardConsoleColor(card));
+                Console.ResetColor();
             }
 
             Console.WriteLine("(Other cards in hand)");
             for(int i = 0; i < otherCards.Count; i++){
                 var card = otherCards[i];
-                Console.WriteLine($"\t{i + possibleCards.Count() + 1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
+                Console.WriteLine($"\t{i + possibleCards.Count() + 1}. "  + UserInterface.CardConsoleColor(card));
+                Console.ResetColor();
             }
 
             var input = GetConsoleInput("Choose a card by index: ");
@@ -105,13 +107,17 @@ class Program
             Console.WriteLine("(Cards in hand)");
             for(int i = 0; i < otherCards.Count; i++){
                 var card = otherCards[i];
-                Console.WriteLine($"\t{i+1}. {Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}");
+                Console.WriteLine($"\t{i + 1}. " + UserInterface.CardConsoleColor(card));
+                Console.ResetColor();
             }
 
+        
             Console.WriteLine("No cards to play... drawing card");
             await Task.Delay(2000);
             var newCard = gc.PlayerDrawCard(CurrentPlayer);
-            Console.WriteLine($"Drawn Card: {Enum.GetName(typeof(CardType), newCard.Type)} {Enum.GetName(typeof(CardColor), newCard.Color)}");
+            Console.WriteLine($"Drawn Card: " + UserInterface.CardConsoleColor(newCard));
+            Console.ResetColor();
+            ConsoleDivider();
             
             if(gc.PossibleCard(newCard)){
                 gc.PlayerPlayCard(CurrentPlayer, newCard);

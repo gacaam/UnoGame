@@ -29,13 +29,26 @@ public static class UserInterface
                 break;
             case CardType.Reverse: symbol = " ↺"; 
                 break;
-            case CardType.Skip: symbol = " ⊵"; 
+            case CardType.Skip: symbol = " X"; 
                 break;
             case CardType.DrawTwo: symbol = "+2"; 
                 break;
             case CardType.DrawFour: symbol = "+4"; 
                 break;
+            case CardType.Wild: symbol = " W"; 
+                break;
         }
+        Console.WriteLine(CardConsoleColor(card));
+        Console.WriteLine("=======");
+        Console.WriteLine("|     |");
+        Console.WriteLine($"| {symbol}  |");
+        Console.WriteLine("|     |");
+        Console.WriteLine("=======");
+        Console.ResetColor();
+    }
+
+    public static string CardConsoleColor(ICard card)
+    {
         switch(card.Color)
         {
             case CardColor.Black: Console.ForegroundColor = ConsoleColor.White; break;
@@ -44,12 +57,6 @@ public static class UserInterface
             case CardColor.Yellow: Console.ForegroundColor = ConsoleColor.Yellow; break;
             case CardColor.Green: Console.ForegroundColor = ConsoleColor.Green; break;
         }
-        Console.Write($"{Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}\n");
-        Console.WriteLine("=======");
-        Console.WriteLine("|     |");
-        Console.WriteLine($"| {symbol}  |");
-        Console.WriteLine("|     |");
-        Console.WriteLine("=======");
-        Console.ResetColor();
+        return $"{Enum.GetName(typeof(CardType), card.Type)} {Enum.GetName(typeof(CardColor), card.Color)}";
     }
 }

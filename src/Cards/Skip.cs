@@ -12,7 +12,7 @@ public class Skip : Card
     {
         gameController.Divider.Invoke();    
         gameController.GameInfo.Invoke($"Skipping {gameController.NextPlayer.Name}'s turn!\n");
-        gameController.ChangeCurrentPlayer();
+        gameController.NextTurn();
         gameController.Divider.Invoke();
         return CardType.Skip;
     }

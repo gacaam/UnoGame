@@ -16,7 +16,7 @@ public class DrawTwo : Card
         {
             gameController.PlayerDrawCard(gameController.NextPlayer);
         }
-        gameController.ChangeCurrentPlayer();
+        gameController.NextTurn();
         gameController.Divider.Invoke();
         return CardType.DrawFour;
     }

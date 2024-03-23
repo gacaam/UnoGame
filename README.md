@@ -8,14 +8,13 @@ This online UNO was designed to be played by 2-4 players
 3. The player that first finishes playing all cards in their hand wins the game.
 
 ## UNO Deck
-An entire deck of cards is comprised of 108 cards with:
-- 19 Red Normal Cards (0 to 9)
-- 19 Yellow Normal Cards (0 to 9)
-- 19 Green Normal Cards (0 to 9)
-- 19 Blue Normal Cards (0 to 9)
-- 8 Skip Cards (two of each color)
-- 8 Reverse Cards (two of each color)
-- 8 Draw Two Cards (two of each color)
-- 4 Wild Cards 
-- 4 Wild Draw Four Cards
+An entire deck of cards is comprised of 108 cards
 ![896px-UNO_cards_deck svg](https://github.com/gacaam/UnoGame/assets/89449970/b894522c-cae9-4bd9-8596-00a1feb4001e)
+
+## Running the App
+This requires an installation of the [.NET framework](https://dotnet.microsoft.com/en-us/download). To run the console app, download the the 'src' folder along with the Uno.sln file into the same directory. Open console, build the Uno.sln file, then run the UnoGame.csproj inside src.
+```console
+
+dotnet build [PATH\Uno.sln]
+dotnet run --project [PATH\src\UnoGame.csproj]
+```

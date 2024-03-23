@@ -12,9 +12,13 @@ An entire deck of cards is comprised of 108 cards
 ![896px-UNO_cards_deck svg](https://github.com/gacaam/UnoGame/assets/89449970/b894522c-cae9-4bd9-8596-00a1feb4001e)
 
 ## Running the App
-This requires an installation of the [.NET framework](https://dotnet.microsoft.com/en-us/download). To run the console app, download the the 'src' folder along with the Uno.sln file into the same directory. Open console, build the Uno.sln file, then run the UnoGame.csproj inside src.
+This requires an installation of the [.NET framework](https://dotnet.microsoft.com/en-us/download). To run the console app, download the the 'src' folder along with the Uno.sln file under the same directory. Open console and build the Uno.sln file. 
 ```console
 
 dotnet build [PATH\Uno.sln]
+```
+Now run the UnoGame.csproj inside src.
+```console
+
 dotnet run --project [PATH\src\UnoGame.csproj]
 ```

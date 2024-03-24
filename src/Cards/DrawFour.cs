@@ -19,7 +19,7 @@ public class WildDrawFour : Card
         }
 
         gameController.Divider.Invoke();
-        gameController.GameInfo.Invoke("Draw four cards >:) \n");
+        gameController.GameInfo.Invoke($"{gameController.NextPlayer.Name} draw four cards >:) \n");
         for(int i=0; i<4; i++)
         {
             gameController.PlayerDrawCard(gameController.NextPlayer);

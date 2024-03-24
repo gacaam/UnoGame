@@ -138,7 +138,7 @@ class Program
     {
         Console.WriteLine("");
         Console.WriteLine(description);
-        string consoleInput = Console.ReadLine(); 
+        string? consoleInput = Console.ReadLine(); 
         if(String.IsNullOrEmpty(consoleInput))
         {
             return String.Empty;

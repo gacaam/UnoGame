@@ -2,17 +2,17 @@ namespace UnoGame;
 
 public class GameController
 {
-    public Func<string, string> GetInput;
-    public Action<string> GameInfo;
-    public Action Divider;
+    public Func<string, string> GetInput {get; set;} = null!;
+    public Action<string>? GameInfo {get; set;}
+    public Action? Divider {get; set;}
     public GameRotation Rotation {get; private set;}
     public Stack<ICard> DiscardPile {get; private set;} 
     public IDeck CardDeck {get; private set;} 
-    public ICard CurrentRevealedCard {get; set;}
+    public ICard CurrentRevealedCard {get; set;} = null!;
     public Dictionary<IPlayer, List<ICard>> PlayersHand {get; private set;} 
-    public IEnumerable<IPlayer> WinnerOrder {get; private set;} 
-    public IPlayer CurrentPlayer{get; private set;}
-    public IPlayer NextPlayer{get; private set;}
+    public IEnumerable<IPlayer> WinnerOrder {get; private set;} = null!;
+    public IPlayer CurrentPlayer{get; private set;} = null!;
+    public IPlayer NextPlayer{get; private set;} = null!;
     public int CurrentPlayerIndex {get; private set;} = 0;
     public int NextPlayerIndex {get; private set;} = 1;
     public GameController()
@@ -85,7 +85,7 @@ public class GameController
 
     public bool PossibleCard(ICard card)
     {
-        return card.Color == CurrentRevealedCard.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard.Type;
+        return card.Color == CurrentRevealedCard?.Color || card.Color == CardColor.Black || card.Type == CurrentRevealedCard?.Type;
     }
 
     public IEnumerable<ICard> GetPossibleCards(IPlayer player)

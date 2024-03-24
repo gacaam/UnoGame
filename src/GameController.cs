@@ -152,4 +152,9 @@ public class GameController
                         ToDictionary(player => player.Key, player => player.Value).Keys.ToList();
         return WinnerOrder;
     }
+
+    public bool CheckEmptyHand()
+    {
+        return PlayersHand.Any(player => player.Value.Count == 0);
+    }
 }

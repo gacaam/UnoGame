@@ -2,12 +2,17 @@
 This is a console app implementation of the classic game UNO, built using C#. 
 
 ## Running the app
-Running the console app requires an installation of the [.NET framework](https://dotnet.microsoft.com/en-us/download). Download the 'src' folder along with the Uno.sln file into the same directory. Open console and build the Uno.sln file. 
+Running the console app requires an installation of the [.NET framework](https://dotnet.microsoft.com/en-us/download). Download the 'src' folder along with the 'Uno.sln' file into the same directory. Open console and build the 'Uno.sln' file. 
 ```console
 
 dotnet build [PATH\Uno.sln]
 ```
-Now run the UnoGame.csproj inside src.
+Navigate the working directory to 'src'.
+```console
+
+cd [PATH\src]
+```
+Now run the 'UnoGame.csproj' inside 'src'.
 ```console
 
 dotnet run --project [PATH\src\UnoGame.csproj]

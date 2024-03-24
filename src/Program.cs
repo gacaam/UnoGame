@@ -43,7 +43,8 @@ class Program
         await Task.Delay(1500);
         while(true)
         {
-            if(gameControl.PlayersHand[gameControl.CurrentPlayer].Count==0)
+            var playerEmptyHand = gameControl.PlayersHand.Any(player => player.Value.Count == 0);
+            if(playerEmptyHand)
             {
                 gameControl.GetWinnerOrder();
                 break;

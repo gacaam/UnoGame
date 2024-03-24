@@ -93,7 +93,7 @@ class Program
 
             var input = GetConsoleInput("Choose a card by index: ");
             int indexVal;
-            while(!int.TryParse(input, out indexVal) || indexVal-1 > possibleCards.Count()){
+            while(!int.TryParse(input, out indexVal) || indexVal > possibleCards.Count()){
                 input = GetConsoleInput("Try again... Choose only available cards by index (ex: 1)");
             }
             var playedCard = possibleCards.ElementAt(indexVal - 1);

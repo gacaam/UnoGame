@@ -6,7 +6,7 @@ class Program
     static async Task Main()
     {   
         // game controller
-        GameController gameControl = new();
+        GameController gameControl = new(new Deck());
         gameControl.GameInfo = ConsolePrint;
         gameControl.GetInput = GetConsoleInput;
         gameControl.Divider = ConsoleDivider;

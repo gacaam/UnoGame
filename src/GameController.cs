@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 namespace UnoGame;
 
 public class GameController
@@ -15,13 +17,16 @@ public class GameController
     public IPlayer NextPlayer{get; private set;} = null!;
     public int CurrentPlayerIndex {get; private set;} = 0;
     public int NextPlayerIndex {get; private set;} = 1;
-    public GameController()
+    private ILogger<GameController>? _log;
+    public GameController(IDeck deck, ILogger<GameController>? logger = null)
     {
         // Initialization
         DiscardPile = new();
         PlayersHand = new();
         Rotation = GameRotation.Clockwise;
-        CardDeck = new Deck();
+        CardDeck = deck;
+        _log = logger;
+        _log?.LogInformation("Game Controller Created");
     }
 
     public ICard PrepareGame()
@@ -55,9 +60,11 @@ public class GameController
     {
         if(PlayersHand.ContainsKey(player))
         {
+            _log.LogWarning($"(InsertPlayer) Player with ID {0} already in game.", player.ID);
             return false;
         }
         PlayersHand.Add(player, []);
+        _log.LogInformation($"(InsertPlayer) Inserted player with ID {0} to game.", player.ID);
         return true;
     }
 
@@ -65,12 +72,14 @@ public class GameController
     {
         if(!PlayersHand.ContainsKey(player))
         {
+            _log.LogWarning($"(SetPlayerHand) Player with ID {0} not added to game yet.", player.ID);
             return false;
         }
         for(int i=0; i<numOfCards; i++)
         {
             PlayersHand[player].Add(CardDeck.Cards.Pop());
         }
+        _log.LogInformation($"(SetPlayerHand) Set cards to player ID {0}.", player.ID);
         return true; 
     }
 
@@ -78,6 +87,7 @@ public class GameController
     {
         if(!PlayersHand.ContainsKey(player))
         {
+            _log.LogWarning($"(GetPlayerHand) Player with ID {0} not added to game yet.", player.ID);
             return Enumerable.Empty<ICard>();
         }
         return PlayersHand[player];
@@ -92,6 +102,7 @@ public class GameController
     { 
         if(!PlayersHand.ContainsKey(player))
         {
+            _log.LogWarning($"(GetPossibleCards) Player with ID {0} not added to game yet.", player.ID);
             return Enumerable.Empty<ICard>();
         }
         List<ICard> possibleCards = PlayersHand[player].FindAll(PossibleCard);
@@ -102,11 +113,13 @@ public class GameController
     { 
         if(!PlayersHand.ContainsKey(player))
         {
+            _log.LogWarning($"(PlayerPlayCard) Player with ID {0} not added to game yet.", player.ID);
             return false;
         }
 
         if(!PlayersHand[player].Contains(cardChosen))
         {
+            _log.LogWarning($"(PlayerPlayCard) Card with ID {0} not in player ID {1}.", cardChosen.ID, player.ID);
             return false;
         }
 
@@ -114,6 +127,7 @@ public class GameController
         CurrentRevealedCard = cardChosen;
         PlayersHand[player].Remove(cardChosen);
         cardChosen.ExecuteCardEffect(this);
+        _log.LogInformation($"(PlayerPlayCard) player ID {0} played {1}.", player.ID, cardChosen.Type);
         return true;
     }
     

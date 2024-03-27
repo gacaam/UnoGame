@@ -94,7 +94,7 @@ public class GameController
         {
             return Enumerable.Empty<ICard>();
         }
-        List<ICard> possibleCards = PlayersHand[player].FindAll(PossibleCard);
+        List<ICard> possibleCards = GetPlayerHand(player).Where(PossibleCard).ToList();
         return possibleCards;
     }
 
@@ -105,7 +105,7 @@ public class GameController
             return false;
         }
 
-        if(!PlayersHand[player].Contains(cardChosen))
+        if(!GetPlayerHand(player).Contains(cardChosen))
         {
             return false;
         }
@@ -157,4 +157,6 @@ public class GameController
     {
         return PlayersHand.Any(player => player.Value.Count == 0);
     }
+
+
 }

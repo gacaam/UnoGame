@@ -1,10 +1,9 @@
 ```mermaid
 ---
-title: Uno Card Game
+title: Uno Game
 ---
+
 classDiagram
-    %% https://service.mattel.com/instruction_sheets/42003-Wild.pdf
-    note "note: base graph"
     class CardColour{
         <<Enumeration>>
         Black,
@@ -35,10 +34,11 @@ classDiagram
 
     class ICard{
         <<Interface>>
-        +int ID {get;}
-        +CardColor Color {get;}
-        +CardType Type {get;}
+        +int ID get;
+        +CardColor Color get;
+        +CardType Type get;
     }
+
 
     class Card{
         <<abstract>>
@@ -54,8 +54,6 @@ classDiagram
     CardType --* ICard : Composition
     CardColor  --* ICard : Composition
     
-    
-
     Card <|-- DrawFour : Inheritance
     Card <|-- Wild : Inheritance
     Card <|-- DrawTwo : Inheritance
@@ -77,8 +75,8 @@ classDiagram
     
     class IPlayer{
         <<Interface>>
-        +int ID {get;}
-        +string Name {get;}
+        +int ID get;
+        +string Name get;
     }
 
     class Player{       
@@ -111,13 +109,13 @@ classDiagram
 
     class IDeck{
         <<Interface>>
-        +Stack~ICard~ Cards {get; set;}
+        +Stack~ICard~ Cards get; set;
         +ShuffleDeck() : Stack~ICard~
         +Draw() : ICard
     }
 
     class Deck{
-        +Stack~ICard~ Cards {get; set;}
+        +Stack~ICard~ Cards get; set;
         +Deck()
         +Deck(Stack ~ICard~ cards)
         +ShuffleDeck() : Stack~ICard~
@@ -131,38 +129,38 @@ classDiagram
     }
 
     class GameController{
-        +Func~string, string~ GetInput {get; set;} 
-        +Action~string~ GameInfo {get; set;}
-        +Action Divider {get; set;}
-        +GameRotation Rotation {get; private set;}
-        +Stack~ICard~ DiscardPile {get; private set;} 
-        +IDeck CardDeck {get; private set;} 
-        +ICard CurrentRevealedCard {get; set;} 
-        +Dictionary~IPlayer, List<.ICard>~ PlayersHand {get; private set;} 
-        +IEnumerable<IPlayer> WinnerOrder {get; private set;} 
-        +IPlayer CurrentPlayer{get; private set;} 
-        +IPlayer NextPlayer{get; private set;} 
-        +int CurrentPlayerIndex {get; private set;} 
-        +int NextPlayerIndex {get; private set;} 
+        +Func~string, string~ GetInput get; set;
+        +Action~string~ GameInfo get; set;
+        +Action Divider get; set;
+        +GameRotation Rotation get; private set;
+        +Stack~ICard~ DiscardPile get; private set; 
+        +IDeck CardDeck get; private set;
+        +ICard CurrentRevealedCard get; set; 
+        +Dictionary~IPlayer, List<.ICard>~ PlayersHand get; private set; 
+        +IEnumerable<IPlayer> WinnerOrder get; private set; 
+        +IPlayer CurrentPlayer get; private set; 
+        +IPlayer NextPlayer get; private set; 
+        +int CurrentPlayerIndex get; private set; 
+        +int NextPlayerIndex get; private set; 
         
         +InsertPlayer(IPlayer player) : bool
-        +SetPlayerHand(IPlayer p, IEnumerable~Card~ cards) : bool
+        +SetPlayerHand(IPlayer player, IEnumerable~Card~ cards) : bool
+        +GetPlayerHand(IPlayer player) : IEnumerable<ICard>
+        +PossibleCard(ICard card) : bool
         +GetPossibleCard(IPlayer p) : IEnumerable~Card~
         +GetWinnerOrder() : IEnumerable~Player~
+        +CheckEmptyHand() : bool
 
         %% Player Action
-        +PlayCard(IPlayer p,ICard c) : bool
-        +CallUNO(IPlayer p) : bool
-        +ChangeRotation(GameRotation gr) : bool
-        +RotateAllPlayerCard() : bool
-        +SwapPlayerCard(IPlayer p1, IPlayer p2) :bool
-        
+        +PrepareGame() : ICard
+        +ChangeRotation(GameRotation gameRotation) : bool
+        +PlayerPlayCard(IPlayer player, ICard chosenCard) : bool
+  
         %% Game System & Player Action
         +PlayerDrawCard() : ICard
         +NextTurn() : IEnumerable~IPlayer~
-        +SetDeck(params ICard) : bool
-        +GetDeck() : IEnumerable~ICard~
     }
+
 
 ```
 

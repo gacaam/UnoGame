@@ -162,13 +162,9 @@ classDiagram
         +Action~IPlayer~ CallUNO
         +Action~IPlayer~ OnAPlayerWinning
         +Action~IPlayer[]~ OnGameEnded
-
-        
     }
 
     class GameController{
-        
-        
         %% Game System 
         +Dictionary~IPlayer, List ~ICard~ ~ playersHand +get() -private set()
         +IDeck deck (+get -set)

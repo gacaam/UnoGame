@@ -105,7 +105,7 @@ public class GameController
             _log.LogWarning($"(GetPossibleCards) Player with ID {0} not added to game yet.", player.ID);
             return Enumerable.Empty<ICard>();
         }
-        List<ICard> possibleCards = PlayersHand[player].FindAll(PossibleCard);
+        List<ICard> possibleCards = GetPlayerHand(player).Where(PossibleCard).ToList();
         return possibleCards;
     }
 
@@ -117,7 +117,7 @@ public class GameController
             return false;
         }
 
-        if(!PlayersHand[player].Contains(cardChosen))
+        if(!GetPlayerHand(player).Contains(cardChosen))
         {
             _log.LogWarning($"(PlayerPlayCard) Card with ID {0} not in player ID {1}.", cardChosen.ID, player.ID);
             return false;
@@ -171,4 +171,6 @@ public class GameController
     {
         return PlayersHand.Any(player => player.Value.Count == 0);
     }
+
+
 }

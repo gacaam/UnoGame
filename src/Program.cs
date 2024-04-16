@@ -66,7 +66,7 @@ class Program
         var CurrentPlayer = gc.CurrentPlayer;
         var CurrentRevealedCard = gc.CurrentRevealedCard;
         var possibleCards = gc.GetPossibleCards(CurrentPlayer);
-        var otherCards = gc.PlayersHand[CurrentPlayer].Where(cards => !possibleCards.Contains(cards)).ToList();
+        var otherCards = gc.GetPlayerHand(CurrentPlayer).Where(cards => !possibleCards.Contains(cards)).ToList();
         
         Console.Clear();
         Console.WriteLine($"Last Card Played:");

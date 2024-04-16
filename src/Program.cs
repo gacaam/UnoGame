@@ -1,12 +1,22 @@
 ﻿using UnoGame;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 
 class Program
 {
     // Console App Implementation
     static async Task Main()
     {   
+        // looger
+        ILoggerFactory loggerFactory = LoggerFactory.Create(log =>
+        {
+            log.AddNLog("nlog.config");
+        });
+    
+        ILogger<GameController> logger = loggerFactory.CreateLogger<GameController>();
+
         // game controller
-        GameController gameControl = new(new Deck());
+        GameController gameControl = new(new Deck(), logger);
         gameControl.GameInfo = ConsolePrint;
         gameControl.GetInput = GetConsoleInput;
         gameControl.Divider = ConsoleDivider;

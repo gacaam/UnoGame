@@ -1,5 +1,5 @@
 # Online UNO  
-This is a console app implementation of the classic game UNO, built using C#. 
+Welcome to the UNO Console App, a console-based implementation of the classic card game UNO, built using C#. This project aims to recreate the fun and excitement of UNO, allowing you to play against friends directly from your terminal.
 
 ## Running the app
 Running the console app requires an installation of the [.NET framework](https://dotnet.microsoft.com/en-us/download). Download the 'src' folder along with the 'Uno.sln' file into the same directory. Open console and build the 'Uno.sln' file. 
